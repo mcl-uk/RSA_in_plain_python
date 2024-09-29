@@ -163,7 +163,7 @@ print()
 # transmission) then decode back again for decryption.
 #
 # Astonishingly encryption and decryption are both simply 1-line invocations of
-# python's native pow() function. It which works with integers of arbitaray length
+# python's native pow() function. It works with integers of arbitaray length
 # and provides the essential (third) modulus argument.
 #
 # Also note that we can encrypt with either the private OR public keys so long as
