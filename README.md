@@ -17,7 +17,7 @@ This script implements RSA encyption and decryption in simple,
 easily readable, commented native python code. No crypto libraries
 are required and it's even migratable to microPython.
 
-It also illustates key generation using just a couple of primitive
+It also illustates key-generation using just a couple of primitive
 functions from pycryptodome.
 So you will need to pip install pycryptodome to run this script
 
