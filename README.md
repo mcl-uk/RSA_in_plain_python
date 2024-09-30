@@ -1,6 +1,5 @@
 # RSA cryptography in native python
 
-Example RSA public-key functions in _native_ python
 A public key crypto system allows Alice to send a secret message to 
 Bob through an open channel safe in the knowledge that only Bob can
 read it - but WITHOUT them having to pre-share a secret key.
