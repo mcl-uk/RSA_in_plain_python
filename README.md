@@ -13,16 +13,12 @@ first made this amazing feat possible.
 
 Think about it, it really is amazing!
 
-This script implements RSA encyption and decryption in simple,
-easily readable, commented native python code. No crypto libraries
-are required and it's even migratable to microPython.
-
-It also illustates key-generation using just a couple of primitive
-functions from pycryptodome.
-So you will need to pip install pycryptodome to run this script
+This script implements RSA key-generation, encyption and decryption in simple,
+easily readable, commented native python code. No crypto libraries are required,
+just a random number source - it's even migratable to microPython.
 
 This is for illustrative purposes only, and is presented here in the
-hope of shining a light on the simplicity, mathematical beauty and sheer
+hope of illuminating the simplicity, mathematical beauty and sheer
 genius of RSA cryptography.
 
 Use in the real world at your own risk.
