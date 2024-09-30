@@ -83,10 +83,10 @@ def eea(e, u):
     a,b = e,u
     cd  = [(1,0),(0,1),(0,0)]
     while b > 0:
-        q,r   = a//b, a%b
+        q,r = a//b, a%b
         cd[2] = (cd[0][0]-q*cd[1][0], cd[0][1]-q*cd[1][1])
         for i in (0,1): cd[i] = cd[i+1]
-        a,b   = b,r
+        a,b = b,r
     if a != 1: return None # Impossible
     return cd[0][0];
 
