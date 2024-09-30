@@ -126,7 +126,7 @@ def keyGen(keySize=1024): # keySize in bits
     # Find an integer d such that (d*e) % u == 1
     d = eea(e, u) # returns None if (impossibly) no result exists
     # Private Key is d (used together with n from the public key).
-    # Note that d is slightly smaller than n and be -ve
+    # Note that d is slightly smaller than n and can be -ve
     return (n,e,d)
 
 
