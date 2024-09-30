@@ -79,16 +79,16 @@ def chunkify(txt, width):
 # This here's some serious black magic scrounged from the internet.
 # Minimal implemetation of the "extended euclidean algorithm" to find
 # the "multiplicative inverse" of the public key e wrt modulus u
-def eea(x, mod): # (e,u)
-    a,b,c1,d1,c2,d2 = x,mod,1,0,0,1
+def eea(e, u):
+    a,b = e,u
+    cd  = [(1,0),(0,1),(0,0)]
     while b > 0:
-        q,  r  = a//b, a%b
-        c3, d3 = c1-q*c2, d1-q*d2
-        c1, d1 = c2, d2
-        c2, d2 = c3, d3
-        a,  b  = b , r
+        q,r   = a//b, a%b
+        cd[2] = (cd[0][0]-q*cd[1][0], cd[0][1]-q*cd[1][1])
+        for i in (0,1): cd[i] = cd[i+1]
+        a,b   = b,r
     if a != 1: return None # Impossible
-    return c1;
+    return cd[0][0];
 
 # Generate a private/public key pair,
 # On error retun d = None (couldn't find a solution, re-try)
