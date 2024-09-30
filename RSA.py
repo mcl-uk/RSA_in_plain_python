@@ -1,4 +1,3 @@
-
 # Example RSA public-key functions in _native_ python
 #
 # Sept 2024  SJM at MarvellConsultants.com
@@ -15,29 +14,38 @@
 #
 # Think about it, it really is amazing!
 #
-# This script implements RSA encyption and decryption in simple,
-# easily readable, commented native python code. No crypto libraries
-# are required and it's even migratable to microPython.
-#
-# It also illustates key generation using just a couple of primitive
-# functions from pycryptodome.
-# So you will need to pip install pycryptodome to run this script
+# This script implements RSA key-generation, encyption and decryption in
+# relatively simple, easily readable, commented native python code.
+# No crypto libraries are required, just a random number source,
+# it's even migratable to microPython.
 #
 # This is for illustrative purposes only, and is presented here in the
-# hope of shining a light on the simplicity, mathematical beauty and sheer
+# hope of iluminating the simplicity, mathematical beauty and sheer
 # genius of RSA cryptography.
-#
 # Use in the real world at your own risk.
 #
 # For a superb overview of all things crypto I can thoroughly recommend:
 # https://www.garykessler.net/library/crypto.html
+#
+# As an example we'll create a pair of public/private keys and encrypt a long(ish)
+# integer 'message' with the private key and then decrypt it with the public key.
+# As that would only be three lines of code we'll make it bit more real-world by
+# encoding the public key and the cypher text into base64 for display (and pretend
+# transmission) then decode back again for decryption.
+#
+# Astonishingly encryption and decryption are both simply 1-line invocations of
+# python's native pow() function. It works with integers of arbitaray length
+# and provides the essential (third) modulus argument.
+#
+# Also note that we can encrypt with either the private OR public keys so long as
+# we subsequently decrypt with the _other_ key.
+#
+# Normally (eg secret key transmission) we'd encrypt with public and decrypt
+# with private keys but the other way round has many uses in authentication
+# applications eg signing documents etc.
+
 
 import base64  # Assumes the reader is familiar with base64 encoding
-# This lib is used only for illustative purposes
-
-# This lib is only required for key generation
-from Crypto.Math import Primality
-# pip install pycryptodome
 
 # Arbitrary integer test 'message', change at will
 MSG = 9765245987065408765087654320876543098736409876543
@@ -75,36 +83,66 @@ def chunkify(txt, width):
         chunks.append(txt[i:i+width])
     return '\n'.join(chunks)
 
-# Used only during key generation:
-# This here's some serious black magic scrounged from the internet.
-# Minimal implemetation of the "extended euclidean algorithm" to find
-# the "multiplicative inverse" of the public key e wrt modulus u
-def eea(e, u):
-    a,b = e,u
-    cd  = [(1,0),(0,1),(0,0)]
-    while b > 0:
-        q,r = a//b, a%b
-        cd[2] = (cd[0][0]-q*cd[1][0], cd[0][1]-q*cd[1][1])
-        for i in (0,1): cd[i] = cd[i+1]
-        a,b = b,r
-    if a != 1: return None # Impossible
-    return cd[0][0];
-
 # Generate a private/public key pair,
 # On error retun d = None (couldn't find a solution, re-try)
 # Std key-sizes are 1024bits (good), 2048 (better), 3072 (unecessary)
 def keyGen(keySize=1024): # keySize in bits
-    # Find two big primes (should not be 'close' to one-another)...
-    while True:
-        p = int(Primality.generate_probable_prime(exact_bits=(keySize//2)+1))
-        if Primality.lucas_test(p) != 1: continue
-        if Primality.miller_rabin_test(p, 64) == 1: break
-    while True:
-        q = int(Primality.generate_probable_prime(exact_bits=(keySize//2)-1))
-        if Primality.lucas_test(p) != 1: continue 
-        if Primality.miller_rabin_test(p, 64) == 1: break
+    import secrets # just as a source of random numbers
+    #
+    # Use a miller-rabin test [scrounged from the internet]
+    # to statistically test a number for probable-primality
+    # to a programmable degree of certainty (govered by k below)
+    def IsPrime(n):
+        # miller-rabin test...
+        def millerTest(d, n):    
+            a = 2 + secrets.randbelow(n - 4);
+            x = pow(a, d, n);
+            if (x == 1 or x == n - 1): return True;
+            while (d != n - 1):
+                x = (x * x) % n;
+                d *= 2;
+                if (x == 1): return False;
+                if (x == n-1): return True;
+            return False;
+        #
+        k = min(int(len(str(n))/5)+4, 64) # no of itterations
+        if n <= 3: return n > 1
+        if (n&1 == 0): return False
+        d = n - 1;
+        while (d % 2 == 0): d //= 2;
+        for i in range(k):
+            if millerTest(d, n) == False: return False
+        return True
+    #
+    # sieve the ocean for primes
+    def getBigPrime(nBits):
+        n = secrets.randbits(nBits)
+        while not IsPrime(n): n = secrets.randbits(nBits)
+        return n
+    #
+    # Some serious black magic scrounged from the internet.
+    # A minimal implemetation of the "extended euclidean algorithm" to find
+    # the "multiplicative inverse" of the public key e wrt modulus u
+    def eea(e, u):
+        a,b = e,u
+        cd  = [(1,0),(0,1),(0,0)]
+        while b > 0:
+            q,r = a//b, a%b
+            cd[2] = (cd[0][0]-q*cd[1][0], cd[0][1]-q*cd[1][1])
+            for i in (0,1): cd[i] = cd[i+1]
+            a,b = b,r
+        if a != 1: return None # Impossible
+        return cd[0][0];
+    #
+    # OK, Find two big primes (should not be 'close' to one-another)...
+    # Note: "with current factorization technology, the advantage
+    # of using 'safe' or 'strong' primes appears to be negligible" [wikipedia]
+    #
+    p = getBigPrime((keySize//2)+1)
+    q = getBigPrime((keySize//2)-1)
     #
     # Create the public key, comprising two integers n & e...
+    #
     n = p * q
     #
     # The strength of RSA rests on the computational difficulty of
@@ -119,14 +157,18 @@ def keyGen(keySize=1024): # keySize in bits
     # The value 65537 is widely used for the public key but we must make
     # sure it wont divide into our chosen modulus, if by chance it does we
     # just move on until we find another prime that doesn't.
+    #
     e = 65537 # standard initial try _almost_ always adequate
-    while (u % e == 0) or (Primality.lucas_test(e) != 1): e += 2 # re-try
+    while (u % e == 0) or (not IsPrime(e)): e += 2 # re-try
     #
     # Now we can create the private key, a bit trickier...
     # Find an integer d such that (d*e) % u == 1
+    #
     d = eea(e, u) # returns None if (impossibly) no result exists
+    #
     # Private Key is d (used together with n from the public key).
     # Note that d is slightly smaller than n and can be -ve
+    #
     return (n,e,d)
 
 
@@ -153,31 +195,14 @@ print(f"Private Key (d): It's a secret, but it's {len(str(abs(d)))} decimal digi
 # The private key can be -ve so can't simply be base64'd
 
 print()
-print('Testing...')
+print('Encypt / decrypt demo...')
 print()
-
-# As an example we'll use the public/private keys we just made to encrypt a long(ish)
-# integer 'message' with our private key and then decrypt it with the public key.
-# As that would only be two lines of code we'll make it bit more real-world by
-# encoding the public key and the cypher text into base64 for display (and pretend
-# transmission) then decode back again for decryption.
-#
-# Astonishingly encryption and decryption are both simply 1-line invocations of
-# python's native pow() function. It works with integers of arbitaray length
-# and provides the essential (third) modulus argument.
-#
-# Also note that we can encrypt with either the private OR public keys so long as
-# we subsequently decrypt with the _other_ key.
-#
-# Normally (eg secret key transmission) we'd encrypt with public and decrypt
-# with private keys but the other way round has many uses in authentication
-# applications eg signing documents etc.
 
 print(f"Message input:     {MSG}") # from top of the script
 
 # Encrypt (note all inputs and outputs are integers)...
 cypherN = pow(MSG, d, n) # encrypt with private key (d)
-# Yes, that it!
+# Yes, that's it!
 
 # Convert cypherN integer to base64 text
 cypherText = bigInt2B64(cypherN)
@@ -199,6 +224,3 @@ output = pow(cypherRx, E, N) # decrypt with recovered public key (N,E)
 # Again that's all there is to it!
 
 print(f"Decrypted output:  {output}")
-
-
-
