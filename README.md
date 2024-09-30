@@ -1,4 +1,4 @@
-# RSA_in_plain_python
+# RSA cryptography in native python
 
 Example RSA public-key functions in _native_ python
 A public key crypto system allows Alice to send a secret message to 
