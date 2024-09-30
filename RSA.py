@@ -97,12 +97,12 @@ def keyGen(keySize=1024): # keySize in bits
         def millerTest(d, n):    
             a = 2 + secrets.randbelow(n - 4);
             x = pow(a, d, n);
-            if (x == 1 or x == n - 1): return True;
+            if (x == 1 or x == n - 1): return True
             while (d != n - 1):
                 x = (x * x) % n;
                 d *= 2;
-                if (x == 1): return False;
-                if (x == n-1): return True;
+                if (x == 1): return False
+                if (x == n-1): return True
             return False;
         #
         k = min(int(len(str(n))/5)+4, 64) # no of itterations
