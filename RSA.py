@@ -87,7 +87,9 @@ def chunkify(txt, width):
 # On error retun d = None (couldn't find a solution, re-try)
 # Std key-sizes are 1024bits (good), 2048 (better), 3072 (unecessary)
 def keyGen(keySize=1024): # keySize in bits
-    import secrets # just as a source of random numbers
+    import secrets  # just as a source of random numbers, I can't speak for the quality of these numbers
+                    # and it doesn't matter for the sake of this illustration but in a production envir-
+                    # onment you'd want to make sure this was a cryptographically sound random source.
     #
     # Use a miller-rabin test [scrounged from the internet]
     # to statistically test a number for probable-primality
