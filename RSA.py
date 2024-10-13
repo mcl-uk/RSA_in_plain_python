@@ -97,21 +97,21 @@ def keyGen(keySize=1024): # keySize in bits
     def IsPrime(n):
         # miller-rabin test...
         def millerTest(d, n):    
-            a = 2 + secrets.randbelow(n - 4);
-            x = pow(a, d, n);
+            a = 2 + secrets.randbelow(n - 4)
+            x = pow(a, d, n)
             if (x == 1 or x == n - 1): return True
             while (d != n - 1):
-                x = (x * x) % n;
-                d *= 2;
+                x = (x * x) % n
+                d *= 2
                 if (x == 1): return False
                 if (x == n-1): return True
-            return False;
+            return False
         #
         k = min(int(len(str(n))/5)+4, 64) # no of itterations
         if n <= 3: return n > 1
         if (n&1 == 0): return False
-        d = n - 1;
-        while (d % 2 == 0): d //= 2;
+        d = n - 1
+        while (d % 2 == 0): d //= 2
         for i in range(k):
             if millerTest(d, n) == False: return False
         return True
