@@ -91,16 +91,15 @@ def keyGen(keySize=1024): # keySize in bits
                     # and it doesn't matter for the sake of this illustration but in a production envir-
                     # onment you'd want to make sure this was a cryptographically sound random source.
     #
-    # Use a miller-rabin test [scrounged from the internet]
-    # to statistically test a number for probable-primality
-    # to a programmable degree of certainty (govered by k below)
+    # Use a miller-rabin test [scrounged from the internet] to _statistically_ test a number for
+    # probable primality - to a programmable degree of certainty (govered by k below)
     def IsPrime(n):
         # miller-rabin test...
         def millerTest(d, n):    
             a = 2 + secrets.randbelow(n - 4)
             x = pow(a, d, n)
-            if (x == 1 or x == n - 1): return True
-            while (d != n - 1):
+            if (x == 1) or (x == n-1): return True
+            while (d != n-1):
                 x = (x * x) % n
                 d *= 2
                 if (x == 1): return False
