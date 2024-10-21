@@ -121,20 +121,6 @@ def keyGen(keySize=1024): # keySize in bits
         while not IsPrime(n): n = secrets.randbits(nBits)
         return n
     #
-    # Some serious black magic scrounged from the internet.
-    # A minimal implemetation of the "extended euclidean algorithm" to find
-    # the "multiplicative inverse" of the public key e wrt modulus u
-    def eea(e, u):
-        a,b = e,u
-        cd  = [(1,0),(0,1),(0,0)]
-        while b > 0:
-            q,r = a//b, a%b
-            cd[2] = (cd[0][0]-q*cd[1][0], cd[0][1]-q*cd[1][1])
-            for i in (0,1): cd[i] = cd[i+1]
-            a,b = b,r
-        if a != 1: return None # Impossible
-        return cd[0][0];
-    #
     # OK, Find two big primes (should not be 'close' to one-another)...
     # Note: "with current factorization technology, the advantage
     # of using 'safe' or 'strong' primes appears to be negligible" [wikipedia]
@@ -165,7 +151,7 @@ def keyGen(keySize=1024): # keySize in bits
     # Now we can create the private key, a bit trickier...
     # Find an integer d such that (d*e) % u == 1
     #
-    d = eea(e, u) # returns None if (impossibly) no result exists
+    d = pow(e, -1, u)  # d = multiplicative-inverse(e, u)
     #
     # Private Key is d (used together with n from the public key).
     # Note that d is slightly smaller than n and can be -ve
