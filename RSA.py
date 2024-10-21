@@ -157,7 +157,9 @@ def keyGen(keySize=1024): # keySize in bits
     #
     # Private Key is d (used together with n from the public key).
     # Note that d is slightly smaller than n and can be -ve
+    # A -ve d can be used or it can be swapped for u+d
     #
+    if d < 0: d += u # let's insure it's +ve
     return (n,e,d)
 
 
@@ -171,17 +173,12 @@ def keyGen(keySize=1024): # keySize in bits
 # Here "very large" means beyond the scope of practical factorisation.
 
 print('Generating new key pair...')
-d = None
-while d is None:
-    n,e,d = keyGen(2048) # create an 2048-bit public/private key pair
-    if d is None: print("Math problem, this shouldn't happen")
-# Note that d can be a negative number!
+n,e,d = keyGen(2048) # create a 2048-bit public/private key pair
 
 # Make a more compact text version of the public key for distribution
 pubKey = f"{bigInt2B64(n)},{bigInt2B64(e)}"
 print(f"Public Key (n,e):\n{chunkify(pubKey, 72)}")
 print(f"Private Key (d): It's a secret, but it's {len(str(abs(d)))} decimal digits")
-# The private key can be -ve so can't simply be base64'd
 
 print()
 print('Encypt / decrypt demo...')
