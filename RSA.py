@@ -21,8 +21,7 @@
 #
 # This is for illustrative purposes only, and is presented here in the
 # hope of iluminating the simplicity, mathematical beauty and sheer
-# genius of RSA cryptography.
-# Use in the real world at your own risk.
+# genius of RSA cryptography. Use in the real world at your own risk.
 #
 # For a superb overview of all things crypto I can thoroughly recommend:
 # https://www.garykessler.net/library/crypto.html
@@ -43,7 +42,6 @@
 # Normally (eg secret key transmission) we'd encrypt with public and decrypt
 # with private keys but the other way round has many uses in authentication
 # applications eg signing documents etc.
-
 
 import base64  # Assumes the reader is familiar with base64 encoding
 
