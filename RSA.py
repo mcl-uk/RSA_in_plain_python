@@ -29,7 +29,7 @@
 #
 # As an example we'll create a pair of public/private keys and encrypt a long(ish)
 # integer 'message' with the private key and then decrypt it with the public key.
-# As that would only be three lines of code we'll make it bit more real-world by
+# As that would only be three lines of code we'll make it a bit more real-world by
 # encoding the public key and the cypher text into base64 for display (and pretend
 # transmission) then decode back again for decryption.
 #
@@ -134,9 +134,9 @@ def keyGen(keySize=1024): # keySize in bits
     #
     # The strength of RSA rests on the computational difficulty of
     # factoring n (above) ie finding the original p & q.
-    # Should it ever become possible to factor a 2048 bit (640 decimal
-    # digit) number then RSA will become just history. In the meantime
-    # we should apreciate its elegance every time we use it.
+    # Should it ever become possible to factor arbitrarily long
+    # numbers then RSA will become history. In the meantime
+    # we can apreciate its elegance every time we use it.
     #
     u = (p - 1) * (q - 1) # the 'modulus'
     #
@@ -148,10 +148,12 @@ def keyGen(keySize=1024): # keySize in bits
     e = 65537 # standard initial try _almost_ always adequate
     while (u % e == 0) or (not IsPrime(e)): e += 2 # re-try
     #
-    # Now we can create the private key, a bit trickier...
+    # Now we can create the private key...
     # Find an integer d such that (d*e) % u == 1
+    # d is the "multiplicative-inverse" of e in mod u arithmetic
+    # we can use the pow() function to calculate it.
     #
-    d = pow(e, -1, u)  # d = multiplicative-inverse(e, u)
+    d = pow(e, -1, u)
     #
     # Private Key is d (used together with n from the public key).
     # Note that d is slightly smaller than n and can be -ve
