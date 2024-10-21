@@ -18,9 +18,7 @@ just a random number source - it's even migratable to microPython.
 
 This is for illustrative purposes only, and is presented here in the
 hope of illuminating the simplicity, mathematical beauty and sheer
-genius of RSA cryptography.
-
-Use in the real world at your own risk.
+genius of RSA cryptography.  Use in the real world at your own risk.
 
 For a superb overview of all things crypto I can thoroughly recommend:
 https://www.garykessler.net/library/crypto.html
