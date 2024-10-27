@@ -154,10 +154,8 @@ def keyGen(keySize=1024): # keySize in bits
     d = pow(e, -1, u)
     #
     # Private Key is d (used together with n from the public key).
-    # Note that d is slightly smaller than n and can be -ve
-    # A -ve d can be used or it can be swapped for u+d
+    # Note that d is slightly smaller than n
     #
-    if d < 0: d += u # let's insure it's +ve
     return (n,e,d)
 
 
