@@ -8,7 +8,7 @@ It was the RSA algorithm that first made this amazing feat possible.
 
 Think about it, it really is amazing!
 
-This script implements RSA key-generation, encyption and decryption in simple, easily readable, commented native python code.
+This script implements RSA key-generation, encryption and decryption in simple, easily readable, commented native python code.
 No crypto libraries required, just a random number source.
 It works on microPython too, but key generation is going to be very time consumimg on a microcontroller.
 Eg an ESP32 may take many minutes to find even a relatively small 1024bit key.
