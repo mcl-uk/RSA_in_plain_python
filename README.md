@@ -13,8 +13,9 @@ first made this amazing feat possible.
 Think about it, it really is amazing!
 
 This script implements RSA key-generation, encyption and decryption in simple,
-easily readable, commented native python code. No crypto libraries are required,
-just a random number source - it's even migratable to microPython.
+easily readable, commented native python code. No crypto libraries required,
+just a random number source - encryption/decryption is migratable to microPython
+but key generation is prohibitively time consuming when running on an ESP32. 
 
 This is for illustrative purposes only, and is presented here in the
 hope of illuminating the simplicity, mathematical beauty and sheer
