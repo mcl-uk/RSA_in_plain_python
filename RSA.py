@@ -159,7 +159,7 @@ def keyGen(keySize=1024): # keySize in bits
     # factoring n (above) ie finding the original p & q.
     # Should it ever become possible to factor arbitrarily long
     # numbers then RSA will become history. In the meantime
-    # we can apreciate its elegance every time we use it.
+    # we can appreciate its elegance every time we use it.
     #
     u = (p - 1) * (q - 1) # the 'modulus'
     #
