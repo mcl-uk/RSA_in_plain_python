@@ -173,16 +173,12 @@ def keyGen(keySize=1024): # keySize in bits
     #
     # Now we can create the private key...
     # Find an integer d such that (d*e) % u == 1
-    # d is the "multiplicative-inverse" of e in mod u arithmetic
-    # we can use the pow() function to calculate it.
+    # d is the "multiplicative-inverse" of e in mod u arithmetic.
     #
-    d = eea(e, u) # equiv pow(e, -1, u), but microPython compatible
-    if d < 0: d += u # make d positive
+    d = eea(e, u)%p # equiv pow(e, -1, u), but microPython compatible
+    # Note that eea() can produce a -ve result, %p fixes that.
     #
-    # Private Key is d (used together with n from the public key).
-    # Note that d is slightly smaller than n
-    #
-    return (n,e,d)
+    return (n,e,d)  # return key-set
 
 
 # --------- MAIN ---------------------------
