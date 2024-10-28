@@ -16,8 +16,9 @@
 #
 # This script implements RSA key-generation, encyption and decryption in
 # relatively simple, easily readable, commented native python code.
-# No crypto libraries are required, just a random number source,
-# it's even migratable to microPython (tested on v1.23).
+# It works on microPython too, but key generation is going to be very
+# time consumimg on a microcontroller. Eg an ESP32 may thake many minutes
+# to find even a relatively small 1024bit key.
 #
 # This is for illustrative purposes only, and is presented here in the
 # hope of iluminating the simplicity, mathematical beauty and sheer
@@ -43,36 +44,42 @@
 # with private keys but the other way round has many uses in authentication
 # applications eg signing documents etc.
 
-import base64  # Assumes the reader is familiar with base64 encoding
+#import base64 utilities
+try: # regular Python
+    from base64 import b64encode
+    from base64 import b64decode
+except: # microPython
+    from ubinascii import b2a_base64 as b64encode
+    from ubinascii import a2b_base64 as b64decode
+
+# Key generation on a microcontroller can be very slow
+# especially for larger key sizes.
+KEY_SIZE = 1024 # eg 1024, 2048, 3072
 
 # Arbitrary integer test 'message', change at will
-MSG = 9765245987065408765087654320876543098736409876543
+# should be of shorter bit-length than KEY_SIZE
+MSG = 1234567890123456789012345678901234
 
 # -------- some supporting functions ---------------------
 
+# microPython does not support int.bit_length()
+def bitLen(n):
+    return len(bin(n))-2
+
+def bytLen(n):
+    return (len(hex(n))-1)//2
+
 # As the name suggests, but dont use with -ve numbers
 def bigInt2Bytes(bigI):
-    i = bigI
-    op = b''
-    while i > 0:
-        by = i % 256
-        i = i >> 8
-        op = by.to_bytes() + op
-    return op
-
-# As the name suggests
-def Bytes2bigInt(bs):
-    op = 0
-    for i in bs: op = (op << 8) + i
-    return op
+    return bigI.to_bytes(bytLen(bigI), 'big')
 
 # Base64 encode a (long) +ve integer
 def bigInt2B64(bigInt):
-    return base64.b64encode(bigInt2Bytes(bigInt)).decode('utf-8')
+    return b64encode(bigInt2Bytes(bigInt)).decode('utf-8')
 
 # Decode a base64 string to a (long) integer (+ve only)
 def B642bigInt(strIn):
-    return Bytes2bigInt(base64.b64decode(strIn))
+    return int.from_bytes(b64decode(strIn), 'big')
 
 # Split a long string into chunks for printing
 def chunkify(txt, width):
@@ -85,16 +92,19 @@ def chunkify(txt, width):
 # On error retun d = None (couldn't find a solution, re-try)
 # Std key-sizes are 1024bits (good), 2048 (better), 3072 (unecessary)
 def keyGen(keySize=1024): # keySize in bits
-    import secrets  # just as a source of random numbers, I can't speak for the quality of these numbers
-                    # and it doesn't matter for the sake of this illustration but in a production envir-
-                    # onment you'd want to make sure this was a cryptographically sound random source.
+    from os import urandom as randBytes
+    #
+    def randBelow(n):
+        rnd = int.from_bytes(randBytes(bytLen(n)), 'big')
+        while rnd > n: rnd >>= 1 
+        return rnd
     #
     # Use a miller-rabin test [scrounged from the internet] to _statistically_ test a number for
     # probable primality - to a programmable degree of certainty (govered by k below)
     def IsPrime(n):
         # miller-rabin test...
         def millerTest(d, n):    
-            a = 2 + secrets.randbelow(n - 4)
+            a = 2 + randBelow(n - 4)
             x = pow(a, d, n)
             if (x == 1) or (x == n-1): return True
             while (d != n-1):
@@ -113,10 +123,10 @@ def keyGen(keySize=1024): # keySize in bits
             if millerTest(d, n) == False: return False
         return True
     #
-    # sieve the ocean for primes
+    # Hunt for primes - SLOW!
     def getBigPrime(nBits):
-        n = secrets.randbits(nBits)
-        while not IsPrime(n): n = secrets.randbits(nBits)
+        n = int.from_bytes(randBytes(nBits//8), 'big') | 1
+        while not IsPrime(n): n += 2
         return n
     #
     # A minimal implemetation of the "extended euclidean algorithm" to find
@@ -138,8 +148,8 @@ def keyGen(keySize=1024): # keySize in bits
     # Note: "with current factorization technology, the advantage
     # of using 'safe' or 'strong' primes appears to be negligible" [wikipedia]
     #
-    p = getBigPrime((keySize//2)+1)
-    q = getBigPrime((keySize//2)-1)
+    p = getBigPrime((KEY_SIZE//2)+1)
+    q = getBigPrime((KEY_SIZE//2)-1)
     #
     # Create the public key, comprising two integers n & e...
     #
@@ -167,6 +177,7 @@ def keyGen(keySize=1024): # keySize in bits
     # we can use the pow() function to calculate it.
     #
     d = eea(e, u) # equiv pow(e, -1, u), but microPython compatible
+    if d < 0: d += u # make d positive
     #
     # Private Key is d (used together with n from the public key).
     # Note that d is slightly smaller than n
