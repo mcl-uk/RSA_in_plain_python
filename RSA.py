@@ -151,7 +151,7 @@ def keyGen(keySize=1024): # keySize in bits
     # d is the "multiplicative-inverse" of e in mod u arithmetic
     # we can use the pow() function to calculate it.
     #
-    d = pow(e, -1, u)
+    d = pow(e, -1, u) # this currently does not work in microPython
     #
     # Private Key is d (used together with n from the public key).
     # Note that d is slightly smaller than n
