@@ -17,7 +17,7 @@
 # This script implements RSA key-generation, encyption and decryption in
 # relatively simple, easily readable, commented native python code.
 # No crypto libraries are required, just a random number source,
-# it's even migratable to microPython.
+# it's even migratable to microPython (tested on v1.23).
 #
 # This is for illustrative purposes only, and is presented here in the
 # hope of iluminating the simplicity, mathematical beauty and sheer
@@ -119,6 +119,21 @@ def keyGen(keySize=1024): # keySize in bits
         while not IsPrime(n): n = secrets.randbits(nBits)
         return n
     #
+    # A minimal implemetation of the "extended euclidean algorithm" to find
+    # the "multiplicative inverse" of e mod u
+    # Equivalent to pow(e, -1, u) - not supported in older Pythons or uPy
+    # Note that if u is prime can use pow(e, p-2, p) as an alternative.
+    def eea(e, u):
+        a,b = e,u
+        cd  = [(1,0),(0,1),(0,0)]
+        while b > 0:
+            q,r = a//b, a%b
+            cd[2] = (cd[0][0]-q*cd[1][0], cd[0][1]-q*cd[1][1])
+            for i in (0,1): cd[i] = cd[i+1]
+            a,b = b,r
+        if a != 1: return None # Impossible
+        return cd[0][0];
+    #
     # OK, Find two big primes (should not be 'close' to one-another)...
     # Note: "with current factorization technology, the advantage
     # of using 'safe' or 'strong' primes appears to be negligible" [wikipedia]
@@ -151,7 +166,7 @@ def keyGen(keySize=1024): # keySize in bits
     # d is the "multiplicative-inverse" of e in mod u arithmetic
     # we can use the pow() function to calculate it.
     #
-    d = pow(e, -1, u) # this currently does not work in microPython
+    d = eea(e, u) # equiv pow(e, -1, u), but microPython compatible
     #
     # Private Key is d (used together with n from the public key).
     # Note that d is slightly smaller than n
