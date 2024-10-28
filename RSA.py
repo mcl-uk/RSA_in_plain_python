@@ -14,7 +14,7 @@
 #
 # Think about it, it really is amazing!
 #
-# This script implements RSA key-generation, encyption and decryption in
+# This script implements RSA key-generation, encryption and decryption in
 # relatively simple, easily readable, commented native python code.
 # It works on microPython too, but key generation is going to be very
 # time consumimg on a microcontroller. Eg an ESP32 may thake many minutes
