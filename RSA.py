@@ -35,7 +35,8 @@
 #
 # Astonishingly encryption and decryption are both simply 1-line invocations of
 # python's native pow() function. It works with integers of arbitaray length
-# and provides the essential (third) modulus argument.
+# and provides the essential (third) modulus argument. Note that an equivalent
+# function exists in php: gmp-powm(), it requires extension=gmp; in php.ini.
 #
 # Also note that we can encrypt with either the private OR public keys so long as
 # we subsequently decrypt with the _other_ key.
@@ -43,6 +44,7 @@
 # Normally (eg secret key transmission) we'd encrypt with public and decrypt
 # with private keys but the other way round has many uses in authentication
 # applications eg signing documents etc.
+
 
 #import base64 utilities
 try: # regular Python
