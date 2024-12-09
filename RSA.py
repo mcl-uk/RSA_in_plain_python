@@ -177,8 +177,8 @@ def keyGen(keySize=1024): # keySize in bits
     # Find an integer d such that (d*e) % u == 1
     # d is the "multiplicative-inverse" of e in mod u arithmetic.
     #
-    d = eea(e, u) # equiv pow(e, -1, u), but microPython compatible
-    # Note that eea() can produce a -ve result, %p fixes that.
+    d = eea(e, u)%u # equiv pow(e, -1, u), but microPython compatible
+    # Note that eea() can produce a -ve result, %u fixes that.
     #
     return (n,e,d)  # return key-set
 
