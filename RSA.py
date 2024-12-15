@@ -134,7 +134,7 @@ def keyGen(keySize=1024): # keySize in bits
     # A minimal implemetation of the "extended euclidean algorithm" to find
     # the "multiplicative inverse" of e mod u
     # Equivalent to pow(e, -1, u) - not supported in older Pythons or uPy
-    # Note that if u is prime can use pow(e, p-2, p) as an alternative.
+    # Note that if u is prime we could use pow(e, p-2, p) as an alternative.
     def eea(e, u):
         a,b = e,u
         cd  = [(1,0),(0,1),(0,0)]
@@ -144,7 +144,7 @@ def keyGen(keySize=1024): # keySize in bits
             for i in (0,1): cd[i] = cd[i+1]
             a,b = b,r
         if a != 1: return None # Impossible
-        return cd[0][0];
+        return cd[0][0]%u;
     #
     # OK, Find two big primes (should not be 'close' to one-another)...
     # Note: "with current factorization technology, the advantage
@@ -153,7 +153,8 @@ def keyGen(keySize=1024): # keySize in bits
     p = getBigPrime((KEY_SIZE//2)+1)
     q = getBigPrime((KEY_SIZE//2)-1)
     #
-    # Create the public key, comprising two integers n & e...
+    # Create the public key, comprising two integers n & e, n is
+    # the modulus and e is the exponent.
     #
     n = p * q
     #
@@ -162,23 +163,25 @@ def keyGen(keySize=1024): # keySize in bits
     # Should it ever become possible to factor arbitrarily long
     # numbers then RSA will become history. In the meantime
     # we can appreciate its elegance every time we use it.
+    # As an intermediate step we now compute the totient u
     #
-    u = (p - 1) * (q - 1) # the 'modulus'
+    u = (p - 1) * (q - 1)
     #
-    # Now come up with an arbirary prime e that is also prime to the modulus.
-    # The value 65537 is widely used for the public key but we must make
-    # sure it wont divide into our chosen modulus, if by chance it does we
+    # Now we need an arbirary prime e that is also prime to the totient.
+    # The value 65537 is widely used for the exponent but we must make
+    # sure it wont divide into our chosen u, if by chance it does we
     # just move on until we find another prime that doesn't.
     #
-    e = 65537 # standard initial try _almost_ always adequate
-    while (u % e == 0) or (not IsPrime(e)): e += 2 # re-try
+    e = 65537
+    while (u % e == 0) or (not IsPrime(e)): e += 2
     #
     # Now we can create the private key...
     # Find an integer d such that (d*e) % u == 1
     # d is the "multiplicative-inverse" of e in mod u arithmetic.
+    # d = pow(e, -1, u), or for microPython compatability we can
+    # use the extended euclidean algorithm to find d
     #
-    d = eea(e, u)%u # equiv pow(e, -1, u), but microPython compatible
-    # Note that eea() can produce a -ve result, %u fixes that.
+    d = eea(e, u) 
     #
     return (n,e,d)  # return key-set
 
