@@ -94,8 +94,7 @@ def chunkify(txt, width):
     return '\n'.join(chunks)
 
 # Generate a private/public key pair,
-# On error retun d = None (couldn't find a solution, re-try)
-# Std key-sizes are 1024bits (good), 2048 (better), 3072 (unecessary)
+# Std key-sizes are 1024bits (good), 2048 (better), 3072 (recommended)
 def keyGen(keySize=1024): # keySize in bits
     from os import urandom as randBytes
     #
@@ -157,7 +156,7 @@ def keyGen(keySize=1024): # keySize in bits
     q = getBigPrime((KEY_SIZE//2)-1)
     #
     # Create the public key, comprising two integers n & e, n is
-    # the modulus and e is the exponent.
+    # the 'modulus' and e is the 'exponent'. Firstly n...
     #
     n = p * q
     #
@@ -166,7 +165,7 @@ def keyGen(keySize=1024): # keySize in bits
     # Should it ever become possible to factor arbitrarily long
     # numbers then RSA will become history. In the meantime
     # we can appreciate its elegance every time we use it.
-    # As an intermediate step we now compute the totient u
+    # As an intermediate step we now compute the totient(n), u...
     #
     u = (p - 1) * (q - 1)
     #
