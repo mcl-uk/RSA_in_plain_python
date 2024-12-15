@@ -60,6 +60,9 @@ KEY_SIZE = 1024 # eg 1024, 2048, 3072
 
 # Arbitrary integer test 'message', change at will
 # should be of shorter bit-length than KEY_SIZE
+# in real-world applications the message would be padded
+# with many additional random digits
+#
 MSG = 1234567890123456789012345678901234
 
 # -------- some supporting functions ---------------------
@@ -71,7 +74,7 @@ def bitLen(n):
 def bytLen(n):
     return (len(hex(n))-1)//2
 
-# As the name suggests, but dont use with -ve numbers
+# As the name suggests, +ve input only
 def bigInt2Bytes(bigI):
     return bigI.to_bytes(bytLen(bigI), 'big')
 
@@ -79,7 +82,7 @@ def bigInt2Bytes(bigI):
 def bigInt2B64(bigInt):
     return b64encode(bigInt2Bytes(bigInt)).decode('utf-8')
 
-# Decode a base64 string to a (long) integer (+ve only)
+# Decode a base64 string to a (long) +ve integer
 def B642bigInt(strIn):
     return int.from_bytes(b64decode(strIn), 'big')
 
