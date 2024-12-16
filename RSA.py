@@ -135,8 +135,7 @@ def keyGen(keySize=1024): # keySize in bits
     #
     # A minimal implemetation of the "extended euclidean algorithm" to find
     # the "multiplicative inverse" of e mod u
-    # Equivalent to pow(e, -1, u) - not supported in older Pythons or uPy
-    # Note that if u is prime we could use pow(e, p-2, p) as an alternative.
+    # Equivalent to pow(e, -1, u) - not supported in older Pythons or uPy.
     def eea(e, u):
         a,b = e,u
         cd  = [(1,0),(0,1),(0,0)]
