@@ -11,7 +11,7 @@
 # https://doctrina.org/Why-RSA-Works-Three-Fundamental-Questions-Answered.html
 # upon which this is based.
 
-print('\nA trivial RSA example with step-by-step proof of concept...\n'
+print('\nA trivial RSA example with step-by-step proof of concept...\n')
 
 p = 199           # prime #1
 q = 233           # prime #2
