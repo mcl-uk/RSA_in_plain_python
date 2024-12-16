@@ -170,7 +170,7 @@ def keyGen(keySize=1024): # keySize in bits
     #
     # Now we need an arbirary prime e that is also prime to the totient.
     # The value 65537 is widely used for the exponent but we must make
-    # sure it wont divide into our chosen u, if by chance it does we
+    # sure it wont divide into our totient u, if by chance it does we
     # just move on until we find another prime that doesn't.
     #
     e = 65537
@@ -202,7 +202,7 @@ n,e,d = keyGen(2048) # create a 2048-bit public/private key pair
 # Make a more compact text version of the public key for distribution
 pubKey = f"{bigInt2B64(n)},{bigInt2B64(e)}"
 print(f"Public Key (n,e):\n{chunkify(pubKey, 72)}")
-print(f"Private Key (d): It's a secret, but it's {len(str(abs(d)))} decimal digits")
+print(f"Private Key (d): It's a secret, but it's {len(str(d))} decimal digits")
 
 print()
 print('Encypt / decrypt demo...')
