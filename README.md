@@ -8,14 +8,16 @@ It was the RSA algorithm that first made this amazing feat possible.
 
 Think about it, it really is amazing!
 
-This script implements RSA key-generation, encryption and decryption in simple, easily readable, commented native python code.
-It also affers a full explanation of how the maths works with a separate trivial example.
-No crypto libraries required, just a random number source.
-It works on microPython too, but key generation is going to be very time consumimg on a microcontroller.
-Eg an ESP32 may take many minutes to find even a relatively small 1024bit key.
+The RSA.py script implements 1024-bit RSA key-generation, encryption and decryption in simple, easily readable, commented native python code.
+RSAmaths.py affers a full explanation of how the maths works illustrated by a micky-mouse example.
+No crypto libraries are required, just a random number source.
+RSA.py works on microPython too, but key generation is going to be very time consumimg on a microcontroller.
+Eg an ESP32 may take many minutes to find even a relatively small 1024bit key, see my eleiptic curve example for a more practical scheme for microcontrollers.
 
-This is for illustrative purposes only, and is presented here in the hope of illuminating the simplicity, mathematical beauty and sheer genius of RSA cryptography.
+This is of course for illustrative purposes only, and is presented here in the hope of illuminating the simplicity, mathematical beauty and sheer genius of RSA cryptography.
 Use in the real world at your own risk.
 
 For a superb overview of all things crypto I can thoroughly recommend:
 https://www.garykessler.net/library/crypto.html
+And for RSA in particular:
+https://doctrina.org/Why-RSA-Works-Three-Fundamental-Questions-Answered.html
