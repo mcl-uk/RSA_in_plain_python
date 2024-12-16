@@ -1,4 +1,3 @@
-
 # A full mathematical explanation of how & why RSA works
 # illustrated with a trivial example.
 # Note that even with these modest starting values some
@@ -11,7 +10,7 @@
 # https://doctrina.org/Why-RSA-Works-Three-Fundamental-Questions-Answered.html
 # upon which this is based.
 
-print('\nA trivial RSA example with step-by-step proof of concept...\n')
+print('\nA trivial RSA example with step-by-step explanation...\n')
 
 p = 199           # prime #1
 q = 233           # prime #2
@@ -22,6 +21,8 @@ d = pow(e, -1, u) # private exponent
 # remeber d is calculated so that:
 assert e*d % u == 1
 # the totient u is crucial here, you'll see why later...
+# check also that e does not divide into u
+assert u %e != 0
 
 m = 666           # our private message
 print('message to send ', m)
