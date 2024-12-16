@@ -27,7 +27,7 @@
 # For a superb overview of all things crypto I can thoroughly recommend:
 # https://www.garykessler.net/library/crypto.html
 #
-# As an example we'll create a pair of public/private keys and encrypt a long(ish)
+# As an example we'll create a public/private key-set and encrypt a long(ish)
 # integer 'message' with the private key and then decrypt it with the public key.
 # As that would only be three lines of code we'll make it a bit more real-world by
 # encoding the public key and the cypher text into base64 for display (and pretend
