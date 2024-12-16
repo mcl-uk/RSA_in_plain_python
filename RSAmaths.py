@@ -1,0 +1,86 @@
+
+# A full mathematical explanation of how & why RSA works
+# illustrated with a trivial example.
+# Note that even with these modest starting values some
+# of the exponents get un-printably large and take a
+# noticeable time to calculate. Things would speed up hugely
+# were we to use the pow(b,e,u) function instead of the
+# algebraic form b**e%u, but for the sake of clarity we'll
+# stick with ** & % for this illustration.
+# See also:
+# https://doctrina.org/Why-RSA-Works-Three-Fundamental-Questions-Answered.html
+# upon which this is based.
+
+print('\nA trivial RSA example with step-by-step proof of concept...\n'
+
+p = 199           # prime #1
+q = 233           # prime #2
+n = p*q           # public modulus
+u = (p-1)*(q-1)   # the mysterious totient
+e = 17            # public exponent
+d = pow(e, -1, u) # private exponent
+# remeber d is calculated so that:
+assert e*d % u == 1
+# the totient u is crucial here, you'll see why later...
+
+m = 666           # our private message
+print('message to send ', m)
+
+# encrypt with public key:
+cyphertext = m**e %n
+print('cyphertext      ', cyphertext)
+
+# decrypt with private key
+mRx = cyphertext**d %n
+print('message received', mRx)
+
+# check result
+assert mRx == m
+
+# EXPLANTION...
+
+# encryption + decription can be summarised thus:
+assert m == ( (m**e) %n )**d %n
+# which (it can be shown) is equivalent to
+assert m == (m**e)**d %n
+# or, of course
+assert m == m**(e*d) %n    # <2>
+# but remember that
+assert e*d % u == 1
+# so therefor e*d = Ka * u + 1
+# where Ka is some integer
+# expanding u...
+# e*d = Ka*(p-1)*(q-1) + 1
+# so m**(e*d) = m**(Ka*(p-1)*(q-1) + 1)
+#             = m * m**(Ka*(p-1)*(q-1))
+#             = m * ( m**(Ka*(q-1)) )**(p-1)    <1>
+# NOW we can apply Fermat's little theorem, which states:
+# any-int-x ** (any-prime-p - 1) modulus p = 1
+# for example:
+assert m**(p-1) %p == 1
+# or
+assert e**(q-1) %q == 1
+# for the 'little theorem' to be true we can see that
+# any-int-x**(p-1) = Kb * p + 1 # where Kb is again some integer
+# applying this to <1> above, and substituting ( m**(Ka*(q-1)) ) for any-int-x
+# m**(e*d) = m * (Kb * p + 1), or
+#          = (m * Kb * p) + m
+# Ka has vanished - we never needed to know it
+# Now taking mod p of both sides:
+# m**(e*d) %p = ((m * Kb * p) + m) %p
+#             = ((m * Kb * p) %p + m) %p
+# but (any-int)*p %p = 0, so:
+assert m**(e*d) %p == m %p
+# again Kb has vanished, we didn't need to know that either!
+# equally we can do the same procedure for q after re-arranging <1> slightly
+# m**(e*d) = m * ( m**(Ka*(p-1)) )**(q-1)
+assert m**(e*d) %q == m %q
+# now it can be show that if y == x %p AND y == x %q then also y == x % (p*q)
+assert m**(e*d) %(p*q) == m %(p*q)
+# but our public modulus n = p*q 
+assert n == p*q
+# so
+assert m**(e*d) %n == m %n
+# as m < n from the ground rules of RSA we have arrived at our original eqn <2>
+assert m**(e*d) %n == m
+print('\nBing-Pot!' ,m**(e*d)%n, '==', m, ' QED')
