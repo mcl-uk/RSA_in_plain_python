@@ -94,7 +94,7 @@ def chunkify(txt, width):
     return '\n'.join(chunks)
 
 # Generate a private/public key pair,
-# Std key-sizes are 1024bits (good), 2048 (better), 3072 (recommended)
+# Std key-sizes are 1024bits (weak), 2048 (ok), 3072 (strong)
 def keyGen(keySize=1024): # keySize in bits
     from os import urandom as randBytes
     #
