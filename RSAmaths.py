@@ -56,12 +56,13 @@ assert e*d % u == 1
 # so m**(e*d) = m**(Ka*(p-1)*(q-1) + 1)
 #             = m * m**(Ka*(p-1)*(q-1))
 #             = m * ( m**(Ka*(q-1)) )**(p-1)    <1>
-# NOW we can apply Fermat's little theorem, which states:
+# now we can apply Fermat's little theorem, which states:
 # any-int-x ** (any-prime-p - 1) modulus p = 1
 # for example:
 assert m**(p-1) %p == 1
 # or
 assert e**(q-1) %q == 1
+# now we can start to see why the totient is computed the way it is...
 # for the 'little theorem' to be true we can see that
 # any-int-x**(p-1) = Kb * p + 1 # where Kb is again some integer
 # applying this to <1> above, and substituting ( m**(Ka*(q-1)) ) for any-int-x
@@ -75,17 +76,17 @@ assert e**(q-1) %q == 1
 assert m**(e*d) %p == m %p  # <3>
 # again Kb has vanished, we didn't need to know that either!
 # equally we can do the same procedure for q after re-arranging <1> slightly
-# m**(e*d) = m * ( m**(Ka*(p-1)) )**(q-1)
+# to: m**(e*d) = m * ( m**(Ka*(p-1)) )**(q-1)
 assert m**(e*d) %q == m %q  # <4>
-# apparently it can be shown that for any expressions a,b & primes p,q:
+# it can be shown that for any expressions a,b & non-equal primes p,q:
 #  IF a%p = b%p AND a%q = b%q THEN a%(p*q) = b%(p*q)
-# sounds plausible, I've not seen a proof but I've tested it numerically
+# sounds plausible, I've not seen a proof but I've tested it numerically at some length
 # so, given <3> and <4> above we can say
 assert m**(e*d) %(p*q) == m %(p*q)
-# but p*q is our public modulus n 
+# but p*q is our public modulus n
 assert p*q == n
 # so
 assert m**(e*d) %n == m %n
 # as m < n from the ground rules of RSA we can obtain our original eqn <2>
 assert m == m**(e*d) %n
-print('\nBing-Pot!' ,m**(e*d)%n, '==', m, ' QED')
+print('\nBing-Pot!', m**(e*d)%n, '==', m, ' QED')
