@@ -71,17 +71,20 @@ assert e**(q-1) %q == 1
 # m**(e*d) %p = ((m * Kb * p) + m) %p
 #             = ((m * Kb * p) %p + m) %p
 # but (any-int)*p %p = 0, so:
-assert m**(e*d) %p == m %p
+assert m**(e*d) %p == m %p  # <3>
 # again Kb has vanished, we didn't need to know that either!
 # equally we can do the same procedure for q after re-arranging <1> slightly
 # m**(e*d) = m * ( m**(Ka*(p-1)) )**(q-1)
-assert m**(e*d) %q == m %q
-# now it can be show that if y == x %p AND y == x %q then also y == x % (p*q)
+assert m**(e*d) %q == m %q  # <4>
+# apparently it can be shown that for any integers a,b:
+#  IF a%p = b%p AND a%q = b%q THEN a%(p*q) = b%(p*q)
+# sounds plausible, I've not seen a proof but I've tested it numerically
+# so, given <3> and <4> above we can say
 assert m**(e*d) %(p*q) == m %(p*q)
-# but our public modulus n = p*q 
-assert n == p*q
+# but p*q is our public modulus n 
+assert p*q == n
 # so
 assert m**(e*d) %n == m %n
-# as m < n from the ground rules of RSA we have arrived at our original eqn <2>
-assert m**(e*d) %n == m
+# as m < n from the ground rules of RSA we can obtain our original eqn <2>
+assert m = m**(e*d) %n
 print('\nBing-Pot!' ,m**(e*d)%n, '==', m, ' QED')
