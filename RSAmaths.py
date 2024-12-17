@@ -24,7 +24,8 @@ assert e*d % u == 1
 # check also that e does not divide into u
 assert u %e != 0
 
-m = 666           # our private message
+m = 6789           # our private message, can be any +ve int < n
+assert m < n
 print('message to send ', m)
 
 # encrypt with public key:
