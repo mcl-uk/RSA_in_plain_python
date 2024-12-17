@@ -77,7 +77,7 @@ assert m**(e*d) %p == m %p  # <3>
 # equally we can do the same procedure for q after re-arranging <1> slightly
 # m**(e*d) = m * ( m**(Ka*(p-1)) )**(q-1)
 assert m**(e*d) %q == m %q  # <4>
-# apparently it can be shown that for any integers a,b:
+# apparently it can be shown that for any expressions a,b & primes p,q:
 #  IF a%p = b%p AND a%q = b%q THEN a%(p*q) = b%(p*q)
 # sounds plausible, I've not seen a proof but I've tested it numerically
 # so, given <3> and <4> above we can say
