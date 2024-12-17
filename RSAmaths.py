@@ -86,5 +86,5 @@ assert p*q == n
 # so
 assert m**(e*d) %n == m %n
 # as m < n from the ground rules of RSA we can obtain our original eqn <2>
-assert m = m**(e*d) %n
+assert m == m**(e*d) %n
 print('\nBing-Pot!' ,m**(e*d)%n, '==', m, ' QED')
