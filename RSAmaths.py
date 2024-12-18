@@ -74,7 +74,6 @@ assert e*d == Ka*(p-1)*(q-1) + 1
 assert m**(e*d) == m**(Ka*(p-1)*(q-1) + 1)
 assert m**(e*d) == m * m**(Ka*(p-1)*(q-1))
 assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)   # <1>
-assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)
 # now we can apply Fermat's little theorem, which states:
 # (any-int-x ** (any-prime-p - 1)) modulus p = 1
 # for example:
