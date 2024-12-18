@@ -75,17 +75,18 @@ assert e**(q-1) %q == 1
 # but (any-int)*p %p = 0, so:
 assert m**(e*d) %p == m %p  # <3>
 # again Kb has vanished, we didn't need to know that either!
-# equally we can do the same procedure for q after re-arranging <1> slightly
-# to: m**(e*d) = m * ( m**(Ka*(p-1)) )**(q-1)
+# similarly, we can do for q exactly what we did for p, re-arranging <1> slightly
+#   m**(e*d) = m * ( m**(Ka*(p-1)) )**(q-1) allows us to write
 assert m**(e*d) %q == m %q  # <4>
-# it can be shown that for any expressions a,b & non-equal primes p,q:
+# now it can be shown that for any integers a,b and non-equal primes p,q:
 #  IF a%p = b%p AND a%q = b%q THEN a%(p*q) = b%(p*q)
-# sounds plausible, I've not seen a proof but I've tested it numerically at some length
-# so, given <3> and <4> above we can say
+# sounds plausible, I've not seen a proof but have tested it numerically
+# at great length and have never managed to find a counter example
+# applying this rule to <3> and <4> above we can say
 assert m**(e*d) %(p*q) == m %(p*q)
 # but p*q is our public modulus n
 assert p*q == n
-# so
+# so we can avoid the use of our secret primes p & q during encryption and decryption
 assert m**(e*d) %n == m %n
 # as m < n from the ground rules of RSA we can obtain our original eqn <2>
 assert m == m**(e*d) %n
