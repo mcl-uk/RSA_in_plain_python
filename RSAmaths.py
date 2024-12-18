@@ -32,7 +32,7 @@ assert u %e != 0
 d = pow(e, -1, u) 
 assert e*d %u == 1
 # check for yourself...
-print(e, '*', d, '%', u, '=', e*d %u)
+print('Check that e*d %u == 1:', e, '*', d, '=', e*d, ', %', u, '=', e*d %u, '\n')
 # the totient u is crucial here, you'll see why later...
 
 # OK, we now have our public key (e & n) and our private key (d)
