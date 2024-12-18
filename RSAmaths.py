@@ -1,28 +1,44 @@
-# A full mathematical explanation of how & why RSA works illustrated with a trivial example.
-# Note that even with these modest starting values some of the exponents get un-printably
+# A detailed, python-based, mathematical explanation of how & why RSA works,
+# illustrated by a trivial key-generation/encrypt/decrypt example.
+# By a non-mathematician for other (python-literate) non-mathematicians.
+# Note that even with these modest input values some of the exponents get un-printably
 # large and take a noticeable time to calculate. Things would speed up hugely were we to use
-# the pow(b,e,u) function instead of the algebraic form b**e%u, but for the sake of clarity
+# python's pow(b,e,u) function instead of the algebraic form b**e %u, but for the sake of clarity
 # we'll stick with separate ** for exponentiation and % for modulus for this illustration.
-# See also:
+# Such a form would of course be impractical for any kind of real-world implementation.
+# Many thanks to:
 # https://doctrina.org/Why-RSA-Works-Three-Fundamental-Questions-Answered.html
 # upon which this is based.
 
 print('\nA trivial RSA example with step-by-step explanation...\n')
 
-p = 199           # prime #1
+# private/public key generation...
+p = 199           # choose two secret primes, #1
 q = 233           # prime #2
-n = p*q           # public modulus
-u = (p-1)*(q-1)   # the mysterious totient
-e = 17            # public exponent
-d = pow(e, -1, u) # private exponent, private key
-# remember d is calculated so that:
-assert e*d %u == 1
-# the totient u is crucial here, you'll see why later...
-# before proceeding we must check that e does not divide into u
-# - this is one of the rules of RSA.
+n = p*q           # public modulus: 1st part of public key
+                  # Note that for sufficiently large p & q it's not feasable
+                  # to back-calculate them knowing only n, this is the keystone upon
+                  # which RSA's security hangs.
+u = (p-1)*(q-1)   # the 'totient', used only during private key generation (keep it secret)
+e = 17            # public exponent: 2nd part of public key, this can be any relatively
+                  # small prime, but we must first check that e does not divide into u
+                  # - this is just one of the rules of RSA.
 assert u %e != 0
 
-m = 6789           # our private message, can be any +ve int < n
+# now we can calculate our private key, d, we need to find an integer such that
+# e*d %u == 1
+# d is thus the 'multiplicative inverse' of e under modulus u (the totient)
+# in modern python implementations we can use the pow() function to find it. 
+d = pow(e, -1, u) 
+assert e*d %u == 1
+# check for yourself...
+print(e, '*', d, '%', u, '=', e*d %u)
+# the totient u is crucial here, you'll see why later...
+
+# OK, we now have our public key (e & n) and our private key (d)
+
+# our private message, can be any +ve int < n
+m = 6789
 assert m < n
 print('message to send ', m)
 
@@ -37,7 +53,8 @@ print('message received', mRx)
 # check result
 assert mRx == m
 
-# EXPLANTION...
+# But what was going on there and how does the maths of it work?
+# Let's take a closer look at the detail...
 
 # encryption + decription can be summarised thus:
 assert m == ( (m**e) %n )**d %n
