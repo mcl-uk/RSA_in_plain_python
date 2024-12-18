@@ -109,5 +109,5 @@ assert m**(e*d) %n == m
 # we've derived our original encrypt/decrypt equation <2>
 print('\nBing-Pot!', m**(e*d)%n, '==', m, ' QED')
 #
-# massive respect to all the people who figured this out back in the 70's
+# massive respect to the geniuses who figured this out back in the 70's
 #
