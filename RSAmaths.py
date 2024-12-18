@@ -65,8 +65,9 @@ assert m == m**(e*d) %n    # <2>
 assert e*d %u == 1
 # so therefor e*d = Ka * u + 1
 # where Ka is some integer
-# we could calculate it (e*d-1)/u but I've a feeling we won't need it...
-Ka = (e*d-1)/u
+# we'll quickly calculate it but I've a feeling we won't be needing it...
+Ka = (e*d-1)//u  # we use // here to force Ka to be represented as an integer
+assert e*d == Ka * u + 1
 # expanding for u
 # e*d = Ka*(p-1)*(q-1) + 1
 # so m**(e*d) = m**(Ka*(p-1)*(q-1) + 1)
@@ -78,18 +79,18 @@ assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)
 # for example:
 assert m**(p-1) %p == 1
 assert e**(q-1) %q == 1
-# now we can start to see why the totient is constructed the way it is...
+# perhaps we can start to see why the totient is constructed the way it is...
 # for the 'little theorem' to be true we can see that
-# any-int-x**(p-1) = Kb * p + 1 # where Kb is again some integer
-# applying this to <1> above, and substituting ( m**(Ka*(q-1)) ) for any-int-x
+# any-int-x**(p-1) = Kb * p + 1
+# similarly to above, where Kb is again some integer
+# applying this to <1>, and substituting ( m**(Ka*(q-1)) ) for any-int-x
 # m**(e*d) = m * (Kb * p + 1), or
 #          = (m * Kb * p) + m
-# Ka has vanished - we never needed to know it
-# to eliminate Kb we can simply apply mod p to both sides:
+# ah yes Ka has vanished, but now we're stuck with Kb
+# which we can eliminate by simply appling mod p to both sides:
 # m**(e*d) %p = ((m * Kb * p) + m) %p
 #             = ((m * Kb * p) %p + m) %p
-#             = m %p
-# because (any-int)*p %p = 0
+#             = m %p  # because (any-int)*p %p = 0
 assert m**(e*d) %p == m %p  # <3>
 # similarly, we can do for q exactly what we did for p, re-arranging <1> slightly
 #   m**(e*d) = m * ( m**(Ka*(p-1)) )**(q-1) allows us to arrive at
@@ -100,11 +101,9 @@ assert m**(e*d) %q == m %q  # <4>
 # great length and have never managed to find a counter example
 # applying this rule to <3> and <4> above we can say
 assert m**(e*d) %(p*q) == m %(p*q)
-# but p*q is our public modulus n
-assert p*q == n
-# thus
+# but p*q is our public modulus n, thus
 assert m**(e*d) %n == m %n
-# as m < n from the ground rules of RSA we can obtain our original eqn <2>
+# as m < n from the ground rules of RSA we come back to our original eqn <2>
 assert m == m**(e*d) %n
 print('\nBing-Pot!', m**(e*d)%n, '==', m, ' QED')
 #
