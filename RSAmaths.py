@@ -59,14 +59,15 @@ assert mRx == m
 assert m == ( (m**e) %n )**d %n
 # which is equivalent to
 assert m == (m**e)**d %n
+# this step may not be immediately obvious but there are plenty of proofs on the interweb
 # or, of course
 assert m == m**(e*d) %n    # <2>
-# but remember that
+# remember we calculated d so that
 assert e*d %u == 1
-# so therefor e*d = Ka * u + 1
-# where Ka is some integer
-# we'll quickly calculate it but I've a feeling we won't be needing it...
-Ka = (e*d-1)//u  # we use // here to force Ka to be represented as an integer
+# or in other words, to remove the modulus:
+# e*d = Ka * u + 1,  where Ka is some integer
+# we'll quickly calculate Ka but I've a feeling we won't actually need it...
+Ka = (e*d-1)//u  # we must use // here to keep Ka as an integer
 assert e*d == Ka * u + 1
 # expanding for u
 # e*d = Ka*(p-1)*(q-1) + 1
@@ -77,6 +78,7 @@ assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)
 # now we can apply Fermat's little theorem, which states:
 # (any-int-x ** (any-prime-p - 1)) modulus p = 1
 # for example:
+assert 12345**6 %7 == 1
 assert m**(p-1) %p == 1
 assert e**(q-1) %q == 1
 # perhaps we can start to see why the totient is constructed the way it is...
