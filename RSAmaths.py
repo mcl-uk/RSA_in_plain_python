@@ -18,7 +18,7 @@ n = p*q           # public modulus
 u = (p-1)*(q-1)   # the mysterious totient
 e = 17            # public exponent
 d = pow(e, -1, u) # private exponent
-# remeber d is calculated so that:
+# remember d is calculated so that:
 assert e*d % u == 1
 # the totient u is crucial here, you'll see why later...
 # check also that e does not divide into u
