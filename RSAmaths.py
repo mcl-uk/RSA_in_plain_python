@@ -12,14 +12,14 @@
 
 print('\nA trivial RSA example with step-by-step explanation...\n')
 
-# private/public key generation...
+# key generation...
 p = 199           # choose two secret primes, #1
 q = 233           # prime #2
 n = p*q           # public modulus: 1st part of public key
                   # Note that for sufficiently large p & q it's not feasable
                   # to back-calculate them knowing only n, this is the keystone upon
                   # which RSA's security hangs.
-u = (p-1)*(q-1)   # the 'totient', used only during private key generation (keep it secret)
+u = (p-1)*(q-1)   # the 'totient', used during private key generation (keep it secret)
 e = 17            # public exponent: 2nd part of public key, this can be any relatively
                   # small prime, but we must first check that e does not divide into u
                   # - this is just one of the rules of RSA.
@@ -32,7 +32,7 @@ assert u %e != 0
 d = pow(e, -1, u) 
 assert e*d %u == 1
 # check for yourself...
-print('Check that e*d %u == 1:', e, '*', d, '=', e*d, ', %', u, '=', e*d %u, '\n')
+print(f'Check that e*d %u == 1: {e}*{d} = {e*d}, %{u} = {e*d %u} -- YES\n')
 # the totient u is crucial here, you'll see why later...
 
 # OK, we now have our public key (e & n) and our private key (d)
