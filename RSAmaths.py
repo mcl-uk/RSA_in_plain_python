@@ -19,7 +19,7 @@ u = (p-1)*(q-1)   # the mysterious totient
 e = 17            # public exponent
 d = pow(e, -1, u) # private exponent
 # remember d is calculated so that:
-assert e*d % u == 1
+assert e*d %u == 1
 # the totient u is crucial here, you'll see why later...
 # check also that e does not divide into u
 assert u %e != 0
