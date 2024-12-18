@@ -66,14 +66,14 @@ assert m == m**(e*d) %n    # <2>
 assert e*d %u == 1
 # or in other words, to remove the modulus:
 # e*d = Ka * u + 1,  where Ka is some integer
-# we'll quickly calculate Ka but I've a feeling we won't actually need it...
+# we'll quickly calculate Ka but I've a feeling we won't utimately need it...
 Ka = (e*d-1)//u  # we must use // here to keep Ka as an integer
 assert e*d == Ka * u + 1
-# expanding for u
-# e*d = Ka*(p-1)*(q-1) + 1
-# so m**(e*d) = m**(Ka*(p-1)*(q-1) + 1)
-#             = m * m**(Ka*(p-1)*(q-1))
-#             = m * ( m**(Ka*(q-1)) )**(p-1)    <1>
+# expanding for u and re-arranging
+assert e*d == Ka*(p-1)*(q-1) + 1
+assert m**(e*d) == m**(Ka*(p-1)*(q-1) + 1)
+assert m**(e*d) == m * m**(Ka*(p-1)*(q-1))
+assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)    <1>
 assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)
 # now we can apply Fermat's little theorem, which states:
 # (any-int-x ** (any-prime-p - 1)) modulus p = 1
