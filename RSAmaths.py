@@ -1,11 +1,8 @@
-# A full mathematical explanation of how & why RSA works
-# illustrated with a trivial example.
-# Note that even with these modest starting values some
-# of the exponents get un-printably large and take a
-# noticeable time to calculate. Things would speed up hugely
-# were we to use the pow(b,e,u) function instead of the
-# algebraic form b**e%u, but for the sake of clarity we'll
-# stick with ** & % for this illustration.
+# A full mathematical explanation of how & why RSA works illustrated with a trivial example.
+# Note that even with these modest starting values some of the exponents get un-printably
+# large and take a noticeable time to calculate. Things would speed up hugely were we to use
+# the pow(b,e,u) function instead of the algebraic form b**e%u, but for the sake of clarity
+# we'll stick with separate ** for exponentiation and % for modulus for this illustration.
 # See also:
 # https://doctrina.org/Why-RSA-Works-Three-Fundamental-Questions-Answered.html
 # upon which this is based.
@@ -17,7 +14,7 @@ q = 233           # prime #2
 n = p*q           # public modulus
 u = (p-1)*(q-1)   # the mysterious totient
 e = 17            # public exponent
-d = pow(e, -1, u) # private exponent
+d = pow(e, -1, u) # private exponent, private key
 # remember d is calculated so that:
 assert e*d %u == 1
 # the totient u is crucial here, you'll see why later...
@@ -48,7 +45,7 @@ assert m == (m**e)**d %n
 # or, of course
 assert m == m**(e*d) %n    # <2>
 # but remember that
-assert e*d % u == 1
+assert e*d %u == 1
 # so therefor e*d = Ka * u + 1
 # where Ka is some integer
 # expanding u...
