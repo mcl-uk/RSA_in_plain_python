@@ -12,7 +12,7 @@ The RSA.py script implements 2048-bit RSA key-generation, encryption and decrypt
 RSAmaths.py offers a full explanation of how the maths works illustrated by a micky-mouse example.
 No crypto libraries are required, just a random number source.
 RSA.py works on microPython too, but key generation is going to be very time consumimg on a microcontroller.
-Eg an ESP32 may take many minutes to find even a relatively small 1024bit key, maybe see my eleiptic curve demo for a more practical scheme for microcontrollers.
+Eg an ESP32 may take many minutes to find even a relatively small 1024bit key, maybe see my elliptic curve demo for a more practical scheme for microcontrollers.
 
 This is all of course for illustrative purposes only, and is presented here in the hope of illuminating the simplicity, mathematical beauty and sheer genius of RSA cryptography.
 Use in the real world at your own risk.
