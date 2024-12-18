@@ -28,15 +28,14 @@ assert u %e != 0
 # now we can calculate our private key, d, we need to find an integer such that
 # e*d %u == 1
 # d is thus the 'multiplicative inverse' of e under modulus u (the totient)
-# in modern python implementations we can use the pow() function to find it. 
-d = pow(e, -1, u) 
+# in modern python implementations we can use the pow() function to find it.
+d = pow(e, -1, u)
 assert e*d %u == 1
 # check for yourself...
 print(f'Check that e*d %u == 1: {e}*{d} = {e*d}, %{u} = {e*d %u} -- YES\n')
 # the totient u is crucial here, you'll see why later...
 
 # OK, we now have our public key (e & n) and our private key (d)
-
 # our private message, can be any +ve int < n
 m = 6789
 assert m < n
@@ -54,11 +53,11 @@ print('message received', mRx)
 assert mRx == m
 
 # But what was going on there and how does the maths of it work?
-# Let's take a closer look at the detail...
+# Let's go take a closer look...
 
 # encryption + decription can be summarised thus:
 assert m == ( (m**e) %n )**d %n
-# which (it can be shown) is equivalent to
+# which is equivalent to
 assert m == (m**e)**d %n
 # or, of course
 assert m == m**(e*d) %n    # <2>
@@ -66,16 +65,18 @@ assert m == m**(e*d) %n    # <2>
 assert e*d %u == 1
 # so therefor e*d = Ka * u + 1
 # where Ka is some integer
-# expanding u...
+# we could calculate it (e*d-1)/u but I've a feeling we won't need it...
+Ka = (e*d-1)/u
+# expanding for u
 # e*d = Ka*(p-1)*(q-1) + 1
 # so m**(e*d) = m**(Ka*(p-1)*(q-1) + 1)
 #             = m * m**(Ka*(p-1)*(q-1))
 #             = m * ( m**(Ka*(q-1)) )**(p-1)    <1>
+assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)
 # now we can apply Fermat's little theorem, which states:
-# any-int-x ** (any-prime-p - 1) modulus p = 1
+# (any-int-x ** (any-prime-p - 1)) modulus p = 1
 # for example:
 assert m**(p-1) %p == 1
-# or
 assert e**(q-1) %q == 1
 # now we can start to see why the totient is constructed the way it is...
 # for the 'little theorem' to be true we can see that
