@@ -91,13 +91,14 @@ assert m**(e*d) %p == m %p  # <3>
 # we just used for p equally to q, yeilding:
 assert m**(e*d) %q == m %q  # <4>
 # It can be shown that for any integer x and primes p,q:
-#  if x%p == y%p and x%q == y%q then: x%(p*q) == y%(p*q)
+#  if x %p == y %p and x %q == y %q then: x %(p*q) == y %(p*q)
 # sounds plausible, I've not seen a proof but have tested it numerically at
 # great length without ever fining a counter example
 # applying this rule to <3> and <4> above we can say
-assert m**(e*d) %(p*q) == m
+assert m**(e*d) %(p*q) == m %(p*q)
 # but p*q is our public modulus n, thus
-assert m**(e*d) %n == m
+assert m**(e*d) %n == m %n
+assert m**(e*d) %n == m   # since m < n
 # we just derived & proved our original encrypt/decrypt equation <2>
 print('\nBing-Pot!', m**(e*d)%n, '==', m, ' QED')
 #
