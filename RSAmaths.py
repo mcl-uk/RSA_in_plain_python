@@ -81,24 +81,24 @@ assert 12345**6 %7 == 1
 assert m**(p-1) %p == 1
 assert e**(q-1) %q == 1
 # with this in mind we apply mod p to both sides of <1> and get
-assert m**(e*d) %p == m * ( m**(Ka*(q-1)) )**(p-1) %p
+assert m**(e*d) %p == (m %p) * ( m**(Ka*(q-1)) )**(p-1) %p
 # now use the 'little theorem' to completely eliminate
 # "( m**(Ka*(q-1)) )**(p-1) %p" which Fermat tells us is 1 
 assert m**(e*d) %p == m %p  # <3>
-# abra-cadabra Ka has gone
+# abra-cadabra Ka and all that complication has gone
 # looking again at <1>, we can re-arrange and apply the same logic
 # we just used for p equally to q, yeilding:
 assert m**(e*d) %q == m %q  # <4>
-# It can be shown that for any integer x and primes p,q:
+# Now it can be shown that for any integers x,y and primes p,q:
 #  if x %p == y %p and x %q == y %q then: x %(p*q) == y %(p*q)
 # sounds plausible, I've not seen a proof but have tested it numerically at
 # great length without ever fining a counter example
 # applying this rule to <3> and <4> above we can say
 assert m**(e*d) %(p*q) == m %(p*q)
 # but p*q is our public modulus n, thus
-assert m**(e*d) %n == m %n
-assert m**(e*d) %n == m   # since m < n
-# we just derived & proved our original encrypt/decrypt equation <2>
+assert m**(e*d) %n == m %n   # or since m < n...
+assert m**(e*d) %n == m
+# QED we just proved our original encrypt/decrypt equation <2>
 print('\nBing-Pot!', m**(e*d)%n, '==', m, ' QED')
 #
 # with profound respect to the geniuses who figured this out back in the 70's
