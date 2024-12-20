@@ -69,7 +69,7 @@ assert e*d %u == 1
 # we'll quickly calculate Ka but I've a feeling we won't utimately need it...
 Ka = (e*d-1)//u  # we must use // here to keep Ka as an integer
 assert e*d == Ka * u + 1
-# expanding for u and re-arranging
+# expanding for u, exponentiating m and re-arranging...
 assert e*d == Ka*(p-1)*(q-1) + 1
 assert m**(e*d) == m**(Ka*(p-1)*(q-1) + 1)
 assert m**(e*d) == m * m**(Ka*(p-1)*(q-1))
