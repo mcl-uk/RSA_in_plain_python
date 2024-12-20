@@ -85,13 +85,13 @@ assert e**(q-1) %q == 1
 assert m**(e*d) %p == m * ( m**(Ka*(q-1)) )**(p-1) %p
 # now use the 'little theorem' to completely eliminate
 # "( m**(Ka*(q-1)) )**(p-1) %p" which Fermat tells us is 1 
-assert m**(e*d) %p == m  # <3>
+assert m**(e*d) %p == m %p  # <3>
 # abra-cadabra Ka has gone
 # looking again at <1>, we can re-arrange and apply the same logic
 # we just used for p equally to q, yeilding:
-assert m**(e*d) %q == m  # <4>
+assert m**(e*d) %q == m %q  # <4>
 # It can be shown that for any integer x and primes p,q:
-#  if x%p == x%q then: x%p == x%q == x%(p*q)
+#  if x%p == y%p and x%q == y%q then: x%(p*q) == y%(p*q)
 # sounds plausible, I've not seen a proof but have tested it numerically at
 # great length without ever fining a counter example
 # applying this rule to <3> and <4> above we can say
