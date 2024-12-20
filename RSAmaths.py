@@ -35,11 +35,12 @@ print(f'Check that e*d %u == 1: {e}*{d} = {e*d}, %{u} = {e*d %u} -- YES\n')
 m = 6789
 assert m < n
 
-# Note that even with these modest input values some of the intermediate numbers get
+# Note that even with these relatively tiny numbers some of the intermediate values get
 # un-printably large and take a noticeable time to calculate. This is because for clarity
 # we're using ** for exponentiation and % for modulus as two separate steps.
 # Python's pow(b,e,u) function, which impements b**e %u in one process, would be
-# a _much_ faster and scaleable option for a real application.
+# a _much_ faster and scaleable option for a real-world application with realistic
+# two or three hundred digit primes, keys and messages.
 
 print('message to send ', m)
 
