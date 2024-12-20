@@ -88,8 +88,8 @@ assert m**(e*d) %p == m * ( m**(Ka*(q-1)) )**(p-1) %p
 # now use the 'little theorem' to completely eliminate
 # "( m**(Ka*(q-1)) )**(p-1) %p" which Fermat tells us is 1
 assert m**(e*d) %p == m %p  # <3>
-# abra-cadabra Ka and all that complication has gone, also note we
-# must keep the %p on the rhs as x*y%p = x%p * y%p not x * (y%p)!
+# abra-cadabra Ka and all that complication has gone, but note we
+# must keep the %p on the rhs as x*y%p = (x%p) * (y%p) not x * (y%p)!
 # looking again at <1>, we can re-arrange and apply the same logic
 # we just used for p equally to q, yeilding:
 assert m**(e*d) %q == m %q  # <4>
