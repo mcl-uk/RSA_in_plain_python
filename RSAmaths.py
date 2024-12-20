@@ -75,37 +75,27 @@ assert m**(e*d) == m**(Ka*(p-1)*(q-1) + 1)
 assert m**(e*d) == m * m**(Ka*(p-1)*(q-1))
 assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)   # <1>
 # that looks a lot more complicated, but we're actually in a good place
-# because now we can apply Fermat's little theorem, which states:
+# because soon we can apply Fermat's little theorem, which states:
 # (any-int-x ** (any-prime-p - 1)) modulus p = 1
 # for example:
 assert 12345**6 %7 == 1
 assert m**(p-1) %p == 1
 assert e**(q-1) %q == 1
-# perhaps we can start to see why the totient is constructed the way it is...
-# for the 'little theorem' to be true we can see that
-# any-int-x**(p-1) = Kb * p + 1
-# similarly to above, where Kb is again some integer
-# applying this to <1>, and substituting ( m**(Ka*(q-1)) ) for any-int-x
-# m**(e*d) = m * (Kb * p + 1), or
-#          = (m * Kb * p) + m
-# ah yes Ka has vanished, but now we're stuck with Kb
-# which we can eliminate by simply appling mod p to both sides:
-# m**(e*d) %p = ((m * Kb * p) + m) %p
-#             = ((m * Kb * p) %p + m) %p
-#             = m %p  # because (any-int)*p %p = 0
-assert m**(e*d) %p == m %p  # <3>
-# looking again at <1>, we can apply the same logic we just used for p
-# equally to q, yeilding:
-assert m**(e*d) %q == m %q  # <4>
-# I believe it can be shown that for any integers a,b and non-equal primes p,q:
-#  if (a%p == b%p) and (a%q == b%q) then: a%(p*q) == b%(p*q)
+# with this in mind we apply mod p to both sides of <1> and get
+assert m**(e*d) %p == m * ( m**(Ka*(q-1)) )**(p-1) %p
+# now use the 'little theorem' to completely eliminate ( m**(Ka*(q-1)) )**(p-1) %p
+assert m**(e*d) %p == m  # <3>
+# ah yes Ka has vanished
+# looking again at <1>, we can re-arrange and apply the same logic we just used
+# for p equally to q, yeilding:
+assert m**(e*d) %q == m  # <4>
+# I believe it can be shown that for any integer x and primes p,q:
+#  if x%p == x%q then: x%p == x%q == x%(p*q)
 # sounds plausible, I've not seen a proof but have tested it numerically at
-# great length and have never managed to find a counter example
+# great length without fining a counter example
 # applying this rule to <3> and <4> above we can say
-assert m**(e*d) %(p*q) == m %(p*q)
+assert m**(e*d) %(p*q) == m
 # but p*q is our public modulus n, thus
-assert m**(e*d) %n == m %n
-# as m < n, a ground rule of RSA, m %n == m
 assert m**(e*d) %n == m
 # we've derived our original encrypt/decrypt equation <2>
 print('\nBing-Pot!', m**(e*d)%n, '==', m, ' QED')
