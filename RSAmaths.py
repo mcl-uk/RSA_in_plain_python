@@ -48,7 +48,7 @@ print('cyphertext      ', cyphertext)
 # decrypt with private key
 mRx = cyphertext**d %n
 print('message received', mRx)
-
+print('checking the maths step by step (may take afew seconds)...')
 # check result
 assert mRx == m
 
