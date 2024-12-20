@@ -1,11 +1,6 @@
 # A detailed, python-based, mathematical explanation of how & why RSA works,
 # illustrated by a trivial key-generation/encrypt/decrypt example.
 # By a non-mathematician for other (python-literate) non-mathematicians.
-# Note that even with these modest input values some of the exponents get un-printably
-# large and take a noticeable time to calculate. Things would speed up hugely were we to use
-# python's pow(b,e,u) function instead of the algebraic form b**e %u, but for the sake of clarity
-# we'll stick with separate ** for exponentiation and % for modulus for this illustration.
-# Such a form would of course be impractical for any kind of real-world implementation.
 # Many thanks to:
 # https://doctrina.org/Why-RSA-Works-Three-Fundamental-Questions-Answered.html
 # upon which this is based.
@@ -39,6 +34,13 @@ print(f'Check that e*d %u == 1: {e}*{d} = {e*d}, %{u} = {e*d %u} -- YES\n')
 # our private message, can be any +ve int < n
 m = 6789
 assert m < n
+
+# Note that even with these modest input values some of the intermediate numbers get
+# un-printably large and take a noticeable time to calculate. This is because for clarity
+# we're using ** for exponentiation and % for modulus as two separate steps.
+# Python's pow(b,e,u) function, which impements b**e %u in one process, would be
+# a _much_ faster and scaleable option for a real application.
+
 print('message to send ', m)
 
 # encrypt with public key:
