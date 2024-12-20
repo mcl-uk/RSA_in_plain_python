@@ -84,7 +84,7 @@ assert 12345**6 %7 == 1
 assert m**(p-1) %p == 1
 assert e**(q-1) %q == 1
 # with this in mind we apply mod p to both sides of <1> and get
-assert m**(e*d) %p == (m %p) * ( m**(Ka*(q-1)) )**(p-1) %p
+assert m**(e*d) %p == m * ( m**(Ka*(q-1)) )**(p-1) %p
 # now use the 'little theorem' to completely eliminate
 # "( m**(Ka*(q-1)) )**(p-1) %p" which Fermat tells us is 1 
 assert m**(e*d) %p == m %p  # <3>
