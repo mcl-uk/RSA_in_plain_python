@@ -113,7 +113,7 @@ assert m**(e*d) %q == m %q  # <4>
 # now it can be shown that for any integers x,y and primes p,q:
 #  if x %p == y %p and x %q == y %q then: x %(p*q) == y %(p*q)
 # sounds plausible, I've not seen a proof but have tested it numerically
-# at great length without ever fining a counter example
+# at great length without ever finding a counter example
 # applying this rule to <3> and <4> above we can say
 assert m**(e*d) %(p*q) == m %(p*q)
 # but p*q is our public modulus n, thus
