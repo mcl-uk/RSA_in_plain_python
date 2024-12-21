@@ -7,7 +7,8 @@
 # Alice can then use Bob's public key to encode her message, while Bob uses his
 # secret key to decode it. If the key is large enough it is not feasible to decode
 # the message knowing only the public key. It was the RSA algorithm that first made
-# this amazing feat possible.
+# this amazing feat possible. And it's still in use today at the bedrock of every-day
+# internet security and authentication.
 # Here I present a detailed, python-based, mathematical explanation of how & why the
 # RSA algoritm works, illustrated by a simple key-generation/encrypt/decrypt example.
 # Written by a non-mathematician for (python-literate) non-mathematicians, and
