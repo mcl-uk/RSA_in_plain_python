@@ -1,6 +1,7 @@
 # A detailed, python-based, mathematical explanation of how & why RSA works,
 # illustrated by a trivial key-generation/encrypt/decrypt example.
-# By a non-mathematician for other (python-literate) non-mathematicians.
+# Written by a non-mathematician for (python-literate) non-mathematicians, and
+# without any of those wierd symbols or terminology that maths nerds use.
 # Many thanks to:
 # https://doctrina.org/Why-RSA-Works-Three-Fundamental-Questions-Answered.html
 # upon which this is based.
@@ -38,9 +39,12 @@ assert m < n
 # Note that even with these relatively tiny numbers some of the intermediate values get
 # un-printably large and take a noticeable time to calculate. This is because for clarity
 # we're using ** for exponentiation and % for modulus as two separate steps.
-# Python's pow(b,e,u) function, which impements b**e %u in one process, would be
-# a _much_ faster and scaleable option for a real-world application with realistic
-# two or three hundred digit primes, keys and messages.
+# Modulo exponentiation is at the heart of RSA, its pretty much all there is to it,
+# both encryption and decryption are done with a single modulo exponentiation step,
+# the genius of it is all in key generation.
+# Python's pow(a,b,c) function, which impements a**b %c in one process, would be
+# a _much_ faster and scaleable option for real-world applications with realistic
+# three hundred plus digit primes, keys and messages.
 
 print('message to send ', m)
 
@@ -105,4 +109,8 @@ assert m**(e*d) %n == m
 # QED we just proved our original encrypt/decrypt equation <2>
 print('\nBing-Pot!', m**(e*d)%n, '==', m, ' QED')
 #
-# with profound respect to the geniuses who figured this out back in the 70's
+# One final note is that, with RSA, one can encrypt with either the
+# private or public key, so long as you decrypt with the other key.
+# Private key encryption is a great way of providing authentication. 
+# ---
+# With profound respect to the geniuses who figured this out back in the 70's
