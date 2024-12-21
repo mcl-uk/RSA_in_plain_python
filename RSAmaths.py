@@ -27,7 +27,7 @@ assert u %e != 0
 # in modern python implementations we can use the pow() function to find it.
 d = pow(e, -1, u)
 assert e*d %u == 1
-# check for yourself...
+# let's put some actual numbers on that:
 print(f'Check that e*d %u == 1: {e}*{d} = {e*d}, %{u} = {e*d %u} -- YES\n')
 # the totient u is crucial here, you'll see why later...
 
