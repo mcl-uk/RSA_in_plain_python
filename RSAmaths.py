@@ -39,7 +39,8 @@ assert u %e != 0
 # in modern python implementations, we can just use the pow() function thusly:
 d = pow(e, -1, u)
 assert e*d %u == 1
-# let's get a handle on that with some actual numbers so you can see for yourself:
+# since this is such an important step let's get a better handle on it
+# with some actual numbers so you can see how it plays out:
 print(f'Check that e*d %u == 1: {e}*{d} = {e*d}, %{u} = {e*d %u} -- YES\n')
 # the totient u is crucial here, you'll see why later...
 
