@@ -25,7 +25,7 @@ assert u %e != 0
 #  (d*e) %u == 1
 # d is called the 'multiplicative inverse' of e under modulus u (the totient)
 # it can be calculated using the 'extended Euclidian algorithm' or more conveniently
-# in modern python implementations we can just use the pow() function to find it.
+# in modern python implementations we can just use the pow() function thusly:
 d = pow(e, -1, u)
 assert e*d %u == 1
 # let's put some actual numbers on that:
