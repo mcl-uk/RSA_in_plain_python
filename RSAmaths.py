@@ -41,10 +41,9 @@ assert m < n
 # we're using ** for exponentiation and % for modulus as two separate steps.
 # Modulo exponentiation is at the heart of RSA, its pretty much all there is to it,
 # both encryption and decryption are done with a single modulo exponentiation step,
-# the genius of it is all in key generation.
-# Python's pow(a,b,c) function, which impements a**b %c in one process, would be
-# a _much_ faster and scaleable option for real-world applications with realistic
-# three hundred plus digit primes, keys and messages.
+# the genius of it is in the choice of keys - the exponents and the modulus.
+# FYI Python's pow(a,b,c) function, which implements a**b %c in one highly optimised
+# process is much much faster even when applied to very large numbers of 300+ digits.
 
 print('message to send ', m)
 
@@ -66,7 +65,8 @@ assert mRx == m
 assert m == ( (m**e) %n )**d %n
 # which is equivalent to
 assert m == (m**e)**d %n
-# this step may not be immediately obvious but there are plenty of proofs on the interweb
+# this step may not be immediately obvious but it is the case that
+# ((x %n)**y) %n == (x**y) %n, try a few simple examples, you'll see.
 # or, of course
 assert m == m**(e*d) %n    # <2>
 # remember we calculated d so that
@@ -81,8 +81,8 @@ assert e*d == Ka*(p-1)*(q-1) + 1
 assert m**(e*d) == m**(Ka*(p-1)*(q-1) + 1)
 assert m**(e*d) == m * m**(Ka*(p-1)*(q-1))
 assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)   # <1>
-# that looks a lot more complicated, but we're actually in a good place
-# because soon we can apply Fermat's little theorem, which states:
+# feels like we made it a lot more complicated, but we're actually now
+# in a good position to apply Fermat's little theorem, which states:
 # (any-int-x ** (any-prime-p - 1)) modulus p = 1, for example:
 assert 12345**6 %7 == 1
 assert m**(p-1) %p == 1
@@ -97,10 +97,10 @@ assert m**(e*d) %p == m %p  # <3>
 # looking again at <1>, we can re-arrange and apply the same logic
 # we just used for p equally to q, yeilding:
 assert m**(e*d) %q == m %q  # <4>
-# Now it can be shown that for any integers x,y and primes p,q:
+# now it can be shown that for any integers x,y and primes p,q:
 #  if x %p == y %p and x %q == y %q then: x %(p*q) == y %(p*q)
-# sounds plausible, I've not seen a proof but have tested it numerically at
-# great length without ever fining a counter example
+# sounds plausible, I've not seen a proof but have tested it numerically
+# at great length without ever fining a counter example
 # applying this rule to <3> and <4> above we can say
 assert m**(e*d) %(p*q) == m %(p*q)
 # but p*q is our public modulus n, thus
