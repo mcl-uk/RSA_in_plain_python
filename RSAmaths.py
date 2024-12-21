@@ -1,5 +1,15 @@
-# A detailed, python-based, mathematical explanation of how & why RSA works,
-# illustrated by a trivial key-generation/encrypt/decrypt example.
+# Public key cryptography explained
+#
+# A public key cryptography system allows Alice to send a secret message to Bob
+# through an open channel safe in the knowledge that only Bob can read it - and
+# without requiring a pre-shared secret key. Instead, Bob prepares in advance two
+# carefully chosen keys, one which he keeps secret and one which he openly publishes.
+# Alice can then use Bob's public key to encode her message, while Bob uses his
+# secret key to decode it. If the key is large enough it is not feasible to decode
+# the message knowing only the public key. It was the RSA algorithm that first made
+# this amazing feat possible.
+# Here I present a detailed, python-based, mathematical explanation of how & why the
+# RSA algoritm works, illustrated by a simple key-generation/encrypt/decrypt example.
 # Written by a non-mathematician for (python-literate) non-mathematicians, and
 # without any of those wierd symbols or terminology that maths nerds use.
 # Many thanks to:
