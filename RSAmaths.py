@@ -34,12 +34,12 @@ assert u %e != 0
 
 # now we can calculate our private key, d - an integer such that
 #  (d*e) %u == 1
-# d is called the 'multiplicative inverse' of e under modulus u (the totient)
-# it can be calculated using the 'extended Euclidian algorithm' or more conveniently
-# in modern python implementations we can just use the pow() function thusly:
+# d is called the 'multiplicative inverse' of e under modulus u, it can easily
+# be calculated using the 'extended Euclidian algorithm' or more conveniently,
+# in modern python implementations, we can just use the pow() function thusly:
 d = pow(e, -1, u)
 assert e*d %u == 1
-# let's put some actual numbers on that:
+# let's get a handle on that with some actual numbers so you can see for yourself:
 print(f'Check that e*d %u == 1: {e}*{d} = {e*d}, %{u} = {e*d %u} -- YES\n')
 # the totient u is crucial here, you'll see why later...
 
