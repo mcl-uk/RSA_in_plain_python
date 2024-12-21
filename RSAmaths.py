@@ -32,7 +32,6 @@ e = 17            # public exponent: 2nd part of public key, this can be any rel
 assert u %e != 0  # - this is just one of the rules of RSA.
                   # 'assert' just means error out if the following expression is false
 
-
 # now we can calculate our private key, d - an integer such that
 #  (d*e) %u == 1
 # d is called the 'multiplicative inverse' of e under modulus u, it can easily
