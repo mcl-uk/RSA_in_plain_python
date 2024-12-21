@@ -29,8 +29,9 @@ n = p*q           # public modulus: 1st part of public key
 u = (p-1)*(q-1)   # the 'totient', used during private key generation (keep it secret)
 e = 17            # public exponent: 2nd part of public key, this can be any relatively
                   # small prime, but we must first check that e does not divide into u
-                  # - this is just one of the rules of RSA.
-assert u %e != 0
+assert u %e != 0  # - this is just one of the rules of RSA.
+                  # 'assert' just means error out if the following expression is false
+
 
 # now we can calculate our private key, d - an integer such that
 #  (d*e) %u == 1
