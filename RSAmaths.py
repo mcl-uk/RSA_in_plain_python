@@ -21,9 +21,9 @@ e = 17            # public exponent: 2nd part of public key, this can be any rel
                   # - this is just one of the rules of RSA.
 assert u %e != 0
 
-# now we can calculate our private key, d, we need to find an integer such that
-# e*d %u == 1
-# d is thus the 'multiplicative inverse' of e under modulus u (the totient)
+# now we can calculate our private key, d - an integer such that
+#  (d*e) %u == 1
+# d is called the 'multiplicative inverse' of e under modulus u (the totient)
 # in modern python implementations we can use the pow() function to find it.
 d = pow(e, -1, u)
 assert e*d %u == 1
