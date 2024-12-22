@@ -97,14 +97,9 @@ assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)   # <1>
 # feels like we made it a lot more complicated, but we're actually now
 # in a good position to apply Fermat's little theorem, which states:
 # (any-int-x ** (any-prime-p - 1)) modulus p = 1, unless x is some
-# multiple of p in which case the result is zero. Interestingly the
-# zero case is still consistent with this proof, and m (or its exponents)
-# can indeed be a multiple of p or q without breaking decryption. The
-# effects on the robustness of the cypher-text however are another matter
-# which in a real application may well require mitigation.
+# multiple of p in which case the result is zero - see footnote
 # for example:
 assert 12345**6 %7 == 1
-assert 12348**6 %7 == 0
 assert e**(q-1) %q == 1
 # with this in mind we apply mod p to both sides of <1> and get
 assert m**(e*d) %p == m * ( m**(Ka*(q-1)) )**(p-1) %p
@@ -132,5 +127,16 @@ print('\nBing-Pot!', m**(e*d)%n, '==', m, ' QED')
 # One final note is that, with RSA, one can encrypt with either the
 # private or public key, so long as you decrypt with the other key.
 # Private key encryption is a great way of providing authentication. 
+#
+# Footnote:
+# interestingly the 'little theorem' zero case is still consistent with
+# this proof, and m (or its exponents) can indeed be a multiple of p or q
+# without breaking decryption. BUT the effects on the robustness of the
+# cypher-text are another matter and in a real application would require
+# mitigation. For example:
+p,q,e = 97,233,17
+message = 233*5 # or 97*12
+cypher  = message**e %(p*q)
+assert cypher == message # not desirable!
 # ---
 # With profound respect to the geniuses who figured this out back in the 70's
