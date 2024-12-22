@@ -98,8 +98,10 @@ assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)   # <1>
 # in a good position to apply Fermat's little theorem, which states:
 # (any-int-x ** (any-prime-p - 1)) modulus p = 1, unless x is some
 # multiple of p in which case the result is zero. Interestingly the
-# zero case is still consistent with this proof and m (or its exponents)
-# can indeed be a multiple of p or q without breaking the algorithm.
+# zero case is still consistent with this proof, and m (or its exponents)
+# can indeed be a multiple of p or q without breaking decryption. The
+# effects on the robustness of the cypher-text however are another matter
+# which in a real application may well require mitigation.
 # for example:
 assert 12345**6 %7 == 1
 assert e**(q-1) %q == 1
