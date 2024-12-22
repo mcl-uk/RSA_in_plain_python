@@ -97,9 +97,9 @@ assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)   # <1>
 # feels like we made it a lot more complicated, but we're actually now
 # in a good position to apply Fermat's little theorem, which states:
 # (any-int-x ** (any-prime-p - 1)) modulus p = 1, unless x is some
-# multiple of p in which case the result is zero. Interestingly this
-# possibility doesn't affect the end result, and m or its exponents can
-# be a multiple of p or q without breaking the algorithm or this proof.
+# multiple of p in which case the result is zero. Interestingly the
+# zero case is still consistent with this proof and m (or its exponents)
+# can indeed be a multiple of p or q without breaking the algorithm.
 # for example:
 assert 12345**6 %7 == 1
 assert e**(q-1) %q == 1
