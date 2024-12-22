@@ -20,7 +20,7 @@
 print('\nA trivial RSA example with step-by-step explanation...\n')
 
 # key generation...
-p = 199           # choose two secret primes, #1
+p = 97            # choose two secret primes, #1
 q = 233           # prime #2
 n = p*q           # public modulus: 1st part of public key
                   # Note that for sufficiently large p & q it's not feasable
@@ -96,17 +96,17 @@ assert m**(e*d) == m * m**(Ka*(p-1)*(q-1))
 assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)   # <1>
 # feels like we made it a lot more complicated, but we're actually now
 # in a good position to apply Fermat's little theorem, which states:
-# (any-int-x ** (any-prime-p - 1)) modulus p = 1, so long as x is
-# not divisible by p, ie x %p != 0.
+# (any-int-x ** (any-prime-p - 1)) modulus p = 1, unless x is some
+# multiple of p in which case the result is zero. Interestingly this
+# possibility doesn't affect the end result, and m or its exponents can
+# be a multiple of p or q without breaking the algorithm or this proof.
 # for example:
 assert 12345**6 %7 == 1
-assert m**(p-1) %p == 1
 assert e**(q-1) %q == 1
 # with this in mind we apply mod p to both sides of <1> and get
 assert m**(e*d) %p == m * ( m**(Ka*(q-1)) )**(p-1) %p
 # now use the 'little theorem' to completely eliminate
-# "( m**(Ka*(q-1)) )**(p-1) %p" which Fermat tells us is 1 provided
-assert m**(Ka*(q-1)) %p != 0 # need a proof for this assertion!
+# "( m**(Ka*(q-1)) )**(p-1) %p" which Fermat tells us is 1
 # and so we get
 assert m**(e*d) %p == m %p  # <3>
 # abra-cadabra Ka and all that complication has gone, notice we
