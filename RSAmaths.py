@@ -104,6 +104,7 @@ assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)   # <1>
 # which in a real application may well require mitigation.
 # for example:
 assert 12345**6 %7 == 1
+assert 12348**6 %7 == 0
 assert e**(q-1) %q == 1
 # with this in mind we apply mod p to both sides of <1> and get
 assert m**(e*d) %p == m * ( m**(Ka*(q-1)) )**(p-1) %p
