@@ -124,7 +124,7 @@ assert m**(e*d) %n == m
 # QED we just proved our original encrypt/decrypt equation <2>
 print('\nBing-Pot!', m**(e*d)%n, '==', m, ' QED')
 #
-# One final note is that, with RSA, one can encrypt with either the
+# It can now be seen that, with RSA, one can encrypt with either the
 # private or public key, so long as you decrypt with the other key.
 # Private key encryption is a great way of providing authentication. 
 #
