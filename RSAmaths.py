@@ -96,17 +96,21 @@ assert m**(e*d) == m * m**(Ka*(p-1)*(q-1))
 assert m**(e*d) == m * ( m**(Ka*(q-1)) )**(p-1)   # <1>
 # feels like we made it a lot more complicated, but we're actually now
 # in a good position to apply Fermat's little theorem, which states:
-# (any-int-x ** (any-prime-p - 1)) modulus p = 1, for example:
+# (any-int-x ** (any-prime-p - 1)) modulus p = 1, so long as x is
+# not divisible by p, ie x %p != 0.
+# for example:
 assert 12345**6 %7 == 1
 assert m**(p-1) %p == 1
 assert e**(q-1) %q == 1
 # with this in mind we apply mod p to both sides of <1> and get
 assert m**(e*d) %p == m * ( m**(Ka*(q-1)) )**(p-1) %p
 # now use the 'little theorem' to completely eliminate
-# "( m**(Ka*(q-1)) )**(p-1) %p" which Fermat tells us is 1
+# "( m**(Ka*(q-1)) )**(p-1) %p" which Fermat tells us is 1 provided
+assert m**(Ka*(q-1)) %p != 0 # need a proof for this assertion!
+# and so we get
 assert m**(e*d) %p == m %p  # <3>
-# abra-cadabra Ka and all that complication has gone, but note we
-# must keep the %p on the rhs as x*y%p = (x%p) * (y%p) not x * (y%p)!
+# abra-cadabra Ka and all that complication has gone, notice we
+# must keep the %p on the rhs as x*y%p == (x%p) * (y%p) != x * (y%p)!
 # looking again at <1>, we can re-arrange and apply the same logic
 # we just used for p equally to q, yeilding:
 assert m**(e*d) %q == m %q  # <4>
