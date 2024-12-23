@@ -52,7 +52,7 @@ assert m < n-1
 # Note that even with these relatively tiny numbers some of the intermediate values get
 # un-printably large and take a noticeable time to calculate. This is because for clarity
 # we're using ** for exponentiation and % for modulus as two separate steps.
-# Modulo exponentiation is at the heart of RSA, its pretty much all there is to it,
+# Modulo exponentiation is at the heart of RSA, it's pretty much all there is to it,
 # both encryption and decryption are done with a single modulo exponentiation step,
 # the genius of it is in the choice of keys - the exponents and the modulus.
 # FYI Python's pow(a,b,c) function, which implements a**b %c in one highly optimised
