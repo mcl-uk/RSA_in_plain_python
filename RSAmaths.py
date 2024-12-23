@@ -129,14 +129,29 @@ print('\nBing-Pot!', m**(e*d)%n, '==', m, ' QED')
 # Private key encryption is a great way of providing authentication. 
 #
 # Footnote:
-# interestingly the 'little theorem' zero case is still consistent with
-# this proof, and m (or its exponents) can indeed be a multiple of p or q
-# without breaking decryption. BUT the effects on the robustness of the
-# cypher-text are another matter and in a real application would require
-# mitigation. For example:
+# Interestingly the 'little theorem' zero case, resulting from the message
+# m being a multiple of p or q, is perfectly consistent with this proof
+# and does not break en/de-cryption. BUT the effects on the quality of the
+# cypher-text are another matter, consider:
 p,q,e = 97,233,17
 message = 233*5 # or 97*12
 cypher  = message**e %(p*q)
-assert cypher == message # not desirable!
+assert cypher == message
+# The cypher-text is the same as the message, no encryption has happened!
+# Other udesirable effects are the cypher being an integer muliple or
+# fraction of the message. When scaled up to real-world key-lengths
+# the issue is mitigated by the fact that the chances of the msg being
+# a multiple of p or q aproximates to 2/sqrt(n) [where n = p*q]
+# which would be an extremely small number, but not zero. Indeed
+# finding such a message would grant easy access to the private key.
+# Also, messages are always padded with plenty of random digits,
+# which could be simply re-generated should the cypher turn out to
+# be related to the msg in some simple way. 
+# Alternatively if you keep the msg significantly shorter than
+# sqrt(n) then there's no chance at all of it being a multiple of
+# p or q. Eg for a 2048b key, maybe keep the msg+padding to under 1000
+# bits - which of course is more than enough for a 256bit AES key
+# suplemented by oodles of random padding.
 # ---
+# SJM Dec 24
 # With profound respect to the geniuses who figured this out back in the 70's
