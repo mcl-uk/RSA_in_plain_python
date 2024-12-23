@@ -8,11 +8,13 @@
 # secret key to decode it. If the key is large enough it is not feasible to decode
 # the message knowing only the public key. It was the RSA algorithm that first made
 # this amazing feat possible. And it's still in use today at the bedrock of every-day
-# internet security and authentication.
+# internet security and authentication.  Note that RSA is only suited to encrypting
+# relatively short messages and in fact is used mostly for key exchange to enable
+# subsequent symetrically-encrypted communication eg using AES.
 # Here I present a detailed, python-based, mathematical explanation of how & why the
 # RSA algoritm works, illustrated by a simple key-generation/encrypt/decrypt example.
 # Written by a non-mathematician for (python-literate) non-mathematicians, and
-# without any of those wierd symbols or terminology that maths nerds use.
+# without any of those wierd symbols or terminology that maths nerds like to use.
 # Many thanks to:
 # https://doctrina.org/Why-RSA-Works-Three-Fundamental-Questions-Answered.html
 # upon which this is based.
