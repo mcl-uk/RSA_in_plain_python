@@ -47,7 +47,8 @@ print(f'Check that e*d %u == 1: {e}*{d} = {e*d}, %{u} = {e*d %u} -- YES\n')
 # the totient u is crucial here, you'll see why later...
 
 # OK, we now have our public key (e & n) and our private key (d)
-# our private message, can be any +ve int < n-1
+print('Public key:',(n,e), '\n')
+# our private message, m, can be any +ve int < n-1
 m = 6789
 assert m < n-1
 
