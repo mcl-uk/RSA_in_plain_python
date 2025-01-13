@@ -59,10 +59,13 @@ except: # microPython
 KEY_SIZE = 1024 # eg 1024, 2048, 3072
 
 # Arbitrary integer test 'message', change at will
-# should be of shorter bit-length than KEY_SIZE
-# in real-world applications the message would be padded
-# with many additional random digits
-#
+# should be of shorter bit-length than KEY_SIZE.
+# In real-world applications, prior to encryption, the message
+# would be pre-processed for randomisation with padding and a
+# hash so as to protect it from various forms of attack and to
+# verify correct decryption.
+# See "Optimal asymmetric encryption padding" or OAEP
+# 
 MSG = 1234567890123456789012345678901234
 
 # -------- some supporting functions ---------------------
