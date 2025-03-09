@@ -14,7 +14,7 @@
 # Here I present a detailed, python-based, mathematical explanation of how & why the
 # RSA algoritm works, illustrated by a simple key-generation/encrypt/decrypt example.
 # Written by a non-mathematician for (python-literate) non-mathematicians, and
-# without any of those wierd symbols or terminology that maths nerds like to use.
+# without any of those wierd symbols or terminology that maths nerds use.
 # Many thanks to:
 # https://doctrina.org/Why-RSA-Works-Three-Fundamental-Questions-Answered.html
 # upon which this is based.
@@ -27,8 +27,7 @@ q = 233           # prime #2
 n = p*q           # public modulus: 1st part of public key
                   # Note that for sufficiently large p & q it's not feasable
                   # to back-calculate them knowing only n, this is the keystone upon
-                  # which RSA's security hangs. In the real world p & q would be many
-                  # hundreds of digits long and also not be close neighbours.
+                  # which RSA's security hangs.
 u = (p-1)*(q-1)   # the 'totient', used during private key generation (keep it secret)
 e = 17            # public exponent: 2nd part of public key, this can be any relatively
                   # small prime, but we must first check that e does not divide into u
@@ -47,16 +46,16 @@ assert e*d %u == 1
 print(f'Check that e*d %u == 1: {e}*{d} = {e*d}, %{u} = {e*d %u} -- YES\n')
 # the totient u is crucial here, you'll see why later...
 
-# OK, we now have our public key (e & n) and our private key (d)
+# OK, we now have our public key (n,e) and our private key (d)
 print('Public key:',(n,e), '\n')
-# our private message, m, can be any +ve int < n-1
+# our private message, can be any +ve int < n-1
 m = 6789
 assert m < n-1
 
 # Note that even with these relatively tiny numbers some of the intermediate values get
 # un-printably large and take a noticeable time to calculate. This is because for clarity
 # we're using ** for exponentiation and % for modulus as two separate steps.
-# Modulo exponentiation is at the heart of RSA, it's pretty much all there is to it,
+# Modulo exponentiation is at the heart of RSA, its pretty much all there is to it,
 # both encryption and decryption are done with a single modulo exponentiation step,
 # the genius of it is in the choice of keys - the exponents and the modulus.
 # FYI Python's pow(a,b,c) function, which implements a**b %c in one highly optimised
@@ -140,22 +139,12 @@ print('\nBing-Pot!', m**(e*d)%n, '==', m, ' QED')
 p,q,e = 97,233,17
 message = 233*5 # or 97*12
 cypher  = message**e %(p*q)
-assert cypher == message
-# The cypher-text is the same as the message, no encryption has happened!
+assert cypher == message # not desirable!
 # Other udesirable effects are the cypher being an integer muliple or
 # fraction of the message. When scaled up to real-world key-lengths
 # the issue is mitigated by the fact that the chances of the msg being
-# a multiple of p or q aproximates to 2/sqrt(n) [where n = p*q]
-# which would be an extremely small number, but not zero. Indeed
-# finding such a message would grant easy access to the private key.
-# Also, messages are always padded with plenty of random digits,
-# which could be simply re-generated should the cypher turn out to
-# be related to the msg in some simple way. 
-# Alternatively if you keep the msg significantly shorter than
-# sqrt(n) then there's no chance at all of it being a multiple of
-# p or q. Eg for a 2048b key, maybe keep the msg+padding to under 1000
-# bits - which of course is more than enough for a 256bit AES key
-# suplemented by oodles of random padding.
+# a multiple of p or q aproximates to 2/sqrt(n) [wher n = p*q]
+# which would of course be an extremely small number, although not zero.
 # ---
 # SJM Dec 24
 # With profound respect to the geniuses who figured this out back in the 70's
