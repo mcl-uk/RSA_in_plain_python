@@ -16,6 +16,7 @@
 #
 # This script implements RSA key-generation, encryption and decryption in
 # relatively simple, easily readable, commented native python code.
+# No crypto libraries are required, just a random number source.
 # It works on microPython too, but key generation is going to be very
 # time consumimg on a microcontroller. Eg an ESP32 may thake many minutes
 # to find even a relatively small 1024bit key.
@@ -27,7 +28,7 @@
 # For a superb overview of all things crypto I can thoroughly recommend:
 # https://www.garykessler.net/library/crypto.html
 #
-# As an example we'll create a public/private key-set and encrypt a long(ish)
+# As an example we'll create a pair of public/private keys and encrypt a long(ish)
 # integer 'message' with the private key and then decrypt it with the public key.
 # As that would only be three lines of code we'll make it a bit more real-world by
 # encoding the public key and the cypher text into base64 for display (and pretend
@@ -36,7 +37,7 @@
 # Astonishingly encryption and decryption are both simply 1-line invocations of
 # python's native pow() function. It works with integers of arbitaray length
 # and provides the essential (third) modulus argument. Note that an equivalent
-# function exists in php: gmp-powm(), it requires extension=gmp; in php.ini.
+# function exists in php: gmp_powm(), it requires extension=gmp; in php.ini.
 #
 # Also note that we can encrypt with either the private OR public keys so long as
 # we subsequently decrypt with the _other_ key.
@@ -44,7 +45,6 @@
 # Normally (eg secret key transmission) we'd encrypt with public and decrypt
 # with private keys but the other way round has many uses in authentication
 # applications eg signing documents etc.
-
 
 #import base64 utilities
 try: # regular Python
@@ -56,28 +56,27 @@ except: # microPython
 
 # Key generation on a microcontroller can be very slow
 # especially for larger key sizes.
-KEY_SIZE = 1024 # eg 1024, 2048, 3072
+KEY_SIZE = 2048 # eg 1024, 2048, 3072
 
 # Arbitrary integer test 'message', change at will
-# should be of shorter bit-length than KEY_SIZE.
-# In real-world applications, prior to encryption, the message
-# would be pre-processed for randomisation with padding and a
-# hash so as to protect it from various forms of attack and to
-# verify correct decryption.
-# See "Optimal asymmetric encryption padding" or OAEP
-# 
+# should be of shorter bit-length than KEY_SIZE
 MSG = 1234567890123456789012345678901234
+# In real-world applications the plain-text would be padded
+# out to key-lengh size, and masked (XORed) with a pseudo-
+# random pattern with embedded hash. Google "Optimal Asymetric
+# Encryption Padding" or OAEP, this further constrains the
+# maximum message size.
 
 # -------- some supporting functions ---------------------
 
-# microPython does not support int.bit_length()
+# microPython does not support int.bit_length
 def bitLen(n):
     return len(bin(n))-2
 
 def bytLen(n):
     return (len(hex(n))-1)//2
 
-# As the name suggests, +ve input only
+# As the name suggests, but dont use with -ve numbers
 def bigInt2Bytes(bigI):
     return bigI.to_bytes(bytLen(bigI), 'big')
 
@@ -85,7 +84,7 @@ def bigInt2Bytes(bigI):
 def bigInt2B64(bigInt):
     return b64encode(bigInt2Bytes(bigInt)).decode('utf-8')
 
-# Decode a base64 string to a (long) +ve integer
+# Decode a base64 string to a (long) integer (+ve only)
 def B642bigInt(strIn):
     return int.from_bytes(b64decode(strIn), 'big')
 
@@ -97,7 +96,8 @@ def chunkify(txt, width):
     return '\n'.join(chunks)
 
 # Generate a private/public key pair,
-# Std key-sizes are 1024bits (weak), 2048 (ok), 3072 (strong)
+# On error retun d = None (couldn't find a solution, re-try)
+# Std key-sizes are 1024bits (good), 2048 (better), 3072 (unecessary)
 def keyGen(keySize=1024): # keySize in bits
     from os import urandom as randBytes
     #
@@ -138,7 +138,8 @@ def keyGen(keySize=1024): # keySize in bits
     #
     # A minimal implemetation of the "extended euclidean algorithm" to find
     # the "multiplicative inverse" of e mod u
-    # Equivalent to pow(e, -1, u) - not supported in older Pythons or uPy.
+    # Equivalent to pow(e, -1, u) - not supported in older Pythons or uPy
+    # Note that if u is prime can use pow(e, p-2, p) as an alternative.
     def eea(e, u):
         a,b = e,u
         cd  = [(1,0),(0,1),(0,0)]
@@ -148,17 +149,16 @@ def keyGen(keySize=1024): # keySize in bits
             for i in (0,1): cd[i] = cd[i+1]
             a,b = b,r
         if a != 1: return None # Impossible
-        return cd[0][0]%u;
+        return cd[0][0];
     #
     # OK, Find two big primes (should not be 'close' to one-another)...
     # Note: "with current factorization technology, the advantage
     # of using 'safe' or 'strong' primes appears to be negligible" [wikipedia]
     #
-    p = getBigPrime((KEY_SIZE//2)+1)
-    q = getBigPrime((KEY_SIZE//2)-1)
+    p = getBigPrime((keySize//2)+1)
+    q = getBigPrime((keySize//2)-1)
     #
-    # Create the public key, comprising two integers n & e, n is
-    # the 'modulus' and e is the 'exponent'. Firstly n...
+    # Create the public key, comprising two integers n & e...
     #
     n = p * q
     #
@@ -167,27 +167,24 @@ def keyGen(keySize=1024): # keySize in bits
     # Should it ever become possible to factor arbitrarily long
     # numbers then RSA will become history. In the meantime
     # we can appreciate its elegance every time we use it.
-    # As an intermediate step we now compute the totient(n), u...
     #
-    u = (p - 1) * (q - 1)
+    u = (p - 1) * (q - 1) # the 'modulus'
     #
-    # Now we need an arbirary prime e that is also prime to the totient.
-    # The value 65537 is widely used for the exponent but we must make
-    # sure it wont divide into our totient u, if by chance it does we
-    # just move on until we find another prime that doesn't.
+    # Now come up with an arbirary prime e that is also prime to the modulus.
+    # The value 65537 is widely used for the public key but we must make
+    # sure it wont divide into our chosen modulus, if by chance it does we
+    # just find the next prime that doesn't.
     #
-    e = 65537
-    while (u % e == 0) or (not IsPrime(e)): e += 2
+    e = 65537 # standard initial try _almost_ always adequate
+    while (u % e == 0) or (not IsPrime(e)): e += 2 # re-try
     #
     # Now we can create the private key...
     # Find an integer d such that (d*e) % u == 1
-    # d is the "multiplicative-inverse" of e in mod u arithmetic.
-    # d = pow(e, -1, u), or for microPython compatability we can
-    # use the extended euclidean algorithm to find d
+    # d is the "multiplicative-inverse" of e in mod u arithmetic
     #
-    d = eea(e, u) 
+    d = eea(e, u)%u # equiv pow(e, -1, u), but microPython compatible
     #
-    return (n,e,d)  # return key-set
+    return (n,e,d)
 
 
 # --------- MAIN ---------------------------
@@ -200,12 +197,12 @@ def keyGen(keySize=1024): # keySize in bits
 # Here "very large" means beyond the scope of practical factorisation.
 
 print('Generating new key pair...')
-n,e,d = keyGen(2048) # create a 2048-bit public/private key pair
+n,e,d = keyGen(KEY_SIZE) # create an N-bit public/private key pair
 
 # Make a more compact text version of the public key for distribution
 pubKey = f"{bigInt2B64(n)},{bigInt2B64(e)}"
 print(f"Public Key (n,e):\n{chunkify(pubKey, 72)}")
-print(f"Private Key (d): It's a secret, but it's {len(str(d))} decimal digits")
+print(f"Private Key (d): It's a secret, but it's {len(str(abs(d)))} decimal digits")
 
 print()
 print('Encypt / decrypt demo...')
