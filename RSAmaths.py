@@ -70,7 +70,7 @@ print('cyphertext      ', cyphertext)
 # decrypt with private key
 mRx = cyphertext**d %n
 print('message received', mRx)
-print('\nchecking the maths step by step (may take afew seconds)...')
+print('\nchecking the maths step by step (may take a few seconds)...')
 # check result
 assert mRx == m
 
