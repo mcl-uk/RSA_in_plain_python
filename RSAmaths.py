@@ -26,8 +26,8 @@ p = 97            # choose two secret primes, #1
 q = 233           # prime #2
 n = p*q           # public modulus: 1st part of public key
                   # Note that for sufficiently large p & q it's not feasable
-                  # to back-calculate them knowing only n, this is the keystone upon
-                  # which RSA's security hangs.
+                  # to back-calculate them knowing only n, this is one of the keystones
+                  # upon which RSA's security is built.
 u = (p-1)*(q-1)   # the 'totient', used during private key generation (keep it secret)
 e = 17            # public exponent: 2nd part of public key, this can be any relatively
                   # small prime, but we must first check that e does not divide into u
