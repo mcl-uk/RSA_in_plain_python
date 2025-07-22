@@ -143,7 +143,7 @@ assert cypher == message # not desirable!
 # Other undesirable effects are the cypher being an integer muliple or
 # fraction of the message. When scaled up to real-world key-lengths
 # the issue is mitigated by the fact that the chances of the msg being
-# a multiple of p or q aproximates to 2/sqrt(n) [wher n = p*q]
+# a multiple of p or q aproximates to 2/sqrt(n) [where n = p*q]
 # which would of course be an extremely small number, although not zero.
 # ---
 # SJM Dec 24
